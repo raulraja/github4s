@@ -5,6 +5,10 @@
 <p>In order to access the Github API, you will need to have <a href="https://github.com/settings/tokens">an access token</a> with the
 appropriate scopes (i.e. if you want to create gists, your token will need to have the gist scope).</p>
 
+<p>A personal token can be valid forever. However, the ones issued for <a href="https://github.com/settings/apps">Github Apps</a> have to be re-issued every hour. 
+To solve that issue, github4s provides <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/interpreters/StaticAccessToken.scala">AccessToken</a> which you can hook into to provide authentication for your app using third-party libraries such as JWT implementations, for example.
+You can find the default implementation for static tokens in [StaticAccessToken][static-access-token-scala].</p>
+
 <h2 id="github4s">Github4s</h2>
 
 <p>Github4s uses <a href="https://typelevel.org/blog/2017/12/27/optimizing-final-tagless.html">Tagless Final encoding</a>.</p>

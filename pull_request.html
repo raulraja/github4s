@@ -16,6 +16,7 @@ with Github4s, you can interact with:</p>
     <ul>
       <li><a href="#list-pull-request-reviews">List reviews</a></li>
       <li><a href="#get-an-individual-review">Get a review</a></li>
+      <li><a href="#create-a-review">Create a review</a></li>
     </ul>
   </li>
 </ul>
@@ -224,6 +225,38 @@ instead of the title and body.</p>
 <p>The <code class="highlighter-rouge">result</code> on the right is the matching <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequestReview</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/pulls/reviews/#get-a-single-review">the API doc</a> for full reference.</p>
+
+<h3 id="create-a-review">Create a review</h3>
+
+<p>You can create a review for a pull request using <code class="highlighter-rouge">createReview</code>; it takes as arguments:</p>
+
+<ul>
+  <li>the repository coordinates (<code class="highlighter-rouge">owner</code> and <code class="highlighter-rouge">name</code> of the repository).</li>
+  <li>the pull request id.</li>
+  <li><code class="highlighter-rouge">commit_id</code> (as part of the <code class="highlighter-rouge">CreatePRReviewRequest</code> object): The SHA of the commit that needs a review. Defaults to the most recent commit.</li>
+  <li><code class="highlighter-rouge">body</code> (as part of the <code class="highlighter-rouge">CreatePRReviewRequest</code> object): Required when using REQUEST_CHANGES or COMMENT for the event parameter. The body text of the pull request review.</li>
+  <li><code class="highlighter-rouge">event</code> (as part of the <code class="highlighter-rouge">CreatePRReviewRequest</code> object): The review action you want to perform. By leaving this blank, you set the review action state to PENDING.</li>
+  <li><code class="highlighter-rouge">comments</code> (as part of the <code class="highlighter-rouge">CreatePRReviewRequest</code> object): An optional list of draft review comments.</li>
+</ul>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">github4s.domain.</span><span class="o">{</span><span class="nc">CreatePRReviewRequest</span><span class="o">,</span> <span class="nc">PRREventApprove</span><span class="o">}</span>
+
+<span class="k">val</span> <span class="nv">createReviewData</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">pullRequests</span><span class="o">.</span><span class="py">createReview</span><span class="o">(</span>
+  <span class="s">"47deg"</span><span class="o">,</span>
+  <span class="s">"github4s"</span><span class="o">,</span>
+  <span class="mi">139</span><span class="o">,</span>
+  <span class="nc">CreatePRReviewRequest</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"commit_id"</span><span class="o">),</span> <span class="s">"body"</span><span class="o">,</span> <span class="nc">PRREventApprove</span><span class="o">)</span>  
+<span class="o">)</span>
+<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">createReviewData</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
+<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequestReview</a>.</p>
+
+<p>See <a href="https://developer.github.com/v3/pulls/reviews/#create-a-review-for-a-pull-request">the API doc</a> for full reference.</p>
 
 <p>As you can see, a few features of the pull request endpoint are missing. As a result, if you’d like
 to see a feature supported, feel free to create an issue and/or a pull request!</p>
