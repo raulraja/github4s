@@ -295,4 +295,6 @@ object Decoders {
   implicit val decodeColumn: Decoder[Column]       = deriveDecoder[Column]
   implicit val decodeCard: Decoder[Card]           = deriveDecoder[Card]
 
+  implicit val decodeReviewers: Decoder[ReviewersResponse] =
+    deriveDecoder[ReviewersResponse]
 }

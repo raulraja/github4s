@@ -18,9 +18,9 @@ package github4s
 
 import github4s.domain._
 import io.circe._
-import io.circe.syntax._
 import io.circe.generic.auto._
 import io.circe.generic.semiauto.deriveEncoder
+import io.circe.syntax._
 
 object Encoders {
 
@@ -74,4 +74,6 @@ object Encoders {
   implicit val encoderMilestoneData: Encoder[MilestoneData]       = deriveEncoder[MilestoneData]
   implicit val encodeNewPullRequestReview: Encoder[CreatePRReviewRequest] =
     deriveEncoder[CreatePRReviewRequest]
+  implicit val encodeRequiestedReviewers: Encoder[ReviewersRequest] =
+    deriveEncoder[ReviewersRequest]
 }

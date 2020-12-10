@@ -196,4 +196,70 @@ class PullRequestsSpec extends BaseSpec {
     )
   }
 
+  "PullRequests.addReviewers" should "call to httpClient.post with the right parameters" in {
+    val response: IO[GHResponse[PullRequestReview]] =
+      IO(GHResponse(pullRequestReview.asRight, okStatusCode, Map.empty))
+
+    implicit val httpClientMock = httpClientMockPost[ReviewersRequest, PullRequestReview](
+      url =
+        s"repos/$validRepoOwner/$validRepoName/pulls/$validPullRequestNumber/requested_reviewers",
+      req = validRequestedReviewersRequest,
+      response = response
+    )
+
+    val pullRequests = new PullRequestsInterpreter[IO]
+
+    pullRequests.addReviewers(
+      validRepoOwner,
+      validRepoName,
+      validPullRequestNumber,
+      validRequestedReviewersRequest,
+      headerUserAgent
+    )
+  }
+
+  "PullRequests.removeReviewers" should "call to httpClient.delete with the right parameters" in {
+    val response: IO[GHResponse[PullRequestReview]] =
+      IO(GHResponse(pullRequestReview.asRight, okStatusCode, Map.empty))
+
+    implicit val httpClientMock =
+      httpClientMockDeleteWithBody[ReviewersRequest, PullRequestReview](
+        url =
+          s"repos/$validRepoOwner/$validRepoName/pulls/$validPullRequestNumber/requested_reviewers",
+        req = validRequestedReviewersRequest,
+        response = response
+      )
+
+    val pullRequests = new PullRequestsInterpreter[IO]
+
+    pullRequests.removeReviewers(
+      validRepoOwner,
+      validRepoName,
+      validPullRequestNumber,
+      validRequestedReviewersRequest,
+      headerUserAgent
+    )
+  }
+
+  "PullRequests.listReviewers" should "call to httpClient.get with the right parameters" in {
+    val response: IO[GHResponse[ReviewersResponse]] =
+      IO(GHResponse(validRequestedReviewersResponse.asRight, okStatusCode, Map.empty))
+
+    implicit val httpClientMock = httpClientMockGet[ReviewersResponse](
+      url =
+        s"repos/$validRepoOwner/$validRepoName/pulls/$validPullRequestNumber/requested_reviewers",
+      response = response
+    )
+
+    val pullRequests = new PullRequestsInterpreter[IO]
+
+    pullRequests.listReviewers(
+      validRepoOwner,
+      validRepoName,
+      validPullRequestNumber,
+      None,
+      headerUserAgent
+    )
+  }
+
 }

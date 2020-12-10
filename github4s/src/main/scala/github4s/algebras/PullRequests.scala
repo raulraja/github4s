@@ -156,4 +156,27 @@ trait PullRequests[F[_]] {
       headers: Map[String, String] = Map()
   ): F[GHResponse[PullRequestReview]]
 
+  def listReviewers(
+      owner: String,
+      repo: String,
+      pullRequest: Int,
+      pagination: Option[Pagination] = None,
+      headers: Map[String, String] = Map()
+  ): F[GHResponse[ReviewersResponse]]
+
+  def addReviewers(
+      owner: String,
+      repo: String,
+      pullRequest: Int,
+      reviewers: ReviewersRequest,
+      headers: Map[String, String] = Map()
+  ): F[GHResponse[PullRequest]]
+
+  def removeReviewers(
+      owner: String,
+      repo: String,
+      pullRequest: Int,
+      reviewers: ReviewersRequest,
+      headers: Map[String, String] = Map()
+  ): F[GHResponse[PullRequest]]
 }
