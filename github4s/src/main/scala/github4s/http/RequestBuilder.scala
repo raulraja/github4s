@@ -47,3 +47,7 @@ case class RequestBuilder[Res](
       case _           => Map.empty[String, String]
     })
 }
+
+object RequestBuilder {
+  val acceptPreviewHeader = Map("Accept" -> "application/vnd.github.lydian-preview+json")
+}

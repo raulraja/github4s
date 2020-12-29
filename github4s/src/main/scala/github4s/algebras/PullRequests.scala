@@ -179,4 +179,12 @@ trait PullRequests[F[_]] {
       reviewers: ReviewersRequest,
       headers: Map[String, String] = Map()
   ): F[GHResponse[PullRequest]]
+
+  def updateBranch(
+      owner: String,
+      repo: String,
+      pullRequest: Int,
+      expectedHeadSha: String,
+      headers: Map[String, String] = Map()
+  ): F[GHResponse[Unit]]
 }

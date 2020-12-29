@@ -22,6 +22,7 @@ import github4s.GHResponse
 import github4s.algebras.PullRequests
 import github4s.domain._
 import github4s.http.HttpClient
+import github4s.http.RequestBuilder.acceptPreviewHeader
 
 class PullRequestsInterpreter[F[_]](implicit client: HttpClient[F]) extends PullRequests[F] {
 
@@ -159,5 +160,18 @@ class PullRequestsInterpreter[F[_]](implicit client: HttpClient[F]) extends Pull
       s"repos/$owner/$repo/pulls/$pullRequest/requested_reviewers",
       headers,
       reviewers
+    )
+
+  override def updateBranch(
+      owner: String,
+      repo: String,
+      pullRequest: Int,
+      expectedHeadSha: String,
+      headers: Map[String, String] = Map()
+  ): F[GHResponse[Unit]] =
+    client.put[BranchUpdateRequest, Unit](
+      s"repos/$owner/$repo/pulls/$pullRequest/update-branch",
+      headers ++ acceptPreviewHeader,
+      BranchUpdateRequest(expectedHeadSha)
     )
 }

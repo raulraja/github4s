@@ -151,3 +151,5 @@ final case class ReviewersResponse(
     users: List[User],
     teams: List[Team]
 )
+
+final case class BranchUpdateRequest(expected_head_sha: String)

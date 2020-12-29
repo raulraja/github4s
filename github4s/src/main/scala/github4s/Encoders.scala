@@ -76,4 +76,6 @@ object Encoders {
     deriveEncoder[CreatePRReviewRequest]
   implicit val encodeRequiestedReviewers: Encoder[ReviewersRequest] =
     deriveEncoder[ReviewersRequest]
+  implicit val encodeBranchUpdateRequest: Encoder[BranchUpdateRequest] =
+    deriveEncoder[BranchUpdateRequest]
 }
