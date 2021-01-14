@@ -31,15 +31,6 @@ trait Users[F[_]] {
   def get(username: String, headers: Map[String, String] = Map()): F[GHResponse[User]]
 
   /**
-   * Get information for a particular user by email
-   *
-   * @param email of the user to retrieve
-   * @param headers optional user headers to include in the request
-   * @return GHResponse[User] User details
-   */
-  def getByEmail(email: String, headers: Map[String, String] = Map()): F[GHResponse[User]]
-
-  /**
    * Get information of the authenticated user
    * @param headers optional user headers to include in the request
    * @return GHResponse[User] User details
@@ -72,5 +63,23 @@ trait Users[F[_]] {
       username: String,
       pagination: Option[Pagination] = None,
       headers: Map[String, String] = Map()
+  ): F[GHResponse[List[User]]]
+
+  /**
+   * Find users via various criteria
+   *
+   * @param query search keywords
+   * @param sort How to sort the results, can be by "followers", "repositories" or "joined"
+   * @param direction In which direction the results are sorted, can be "asc" or "desc"
+   * @param pagination Limit and Offset for pagination
+   * @param headers optional user headers to include in the request
+   * @return GHResponse[User] User details
+   */
+  def searchUsers(
+    query: String,
+    sort: Option[String] = None,
+    direction: Option[String] = None,
+    pagination: Option[Pagination] = None,
+    headers: Map[String, String] = Map()
   ): F[GHResponse[List[User]]]
 }

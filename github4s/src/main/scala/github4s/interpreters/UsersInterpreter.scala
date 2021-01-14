@@ -27,6 +27,9 @@ class UsersInterpreter[F[_]](implicit client: HttpClient[F]) extends Users[F] {
   override def get(username: String, headers: Map[String, String]): F[GHResponse[User]] =
     client.get[User](s"users/$username", headers)
 
+  override def searchUsers(email: String, headers: Map[String, String]): F[GHResponse[User]] =
+    client.get[User](s"users/$username", headers)
+
   override def getAuth(headers: Map[String, String]): F[GHResponse[User]] =
     client.get[User]("user", headers)
 
@@ -45,4 +48,14 @@ class UsersInterpreter[F[_]](implicit client: HttpClient[F]) extends Users[F] {
   ): F[GHResponse[List[User]]] =
     client
       .get[List[User]](s"users/$username/following", headers, pagination = pagination)
+
+  override def searchUsers(
+    query: String,
+    sort: Option[String],
+    direction: Option[String],
+    pagination: Option[Pagination],
+    headers: Map[String, String],
+  ): F[GHResponse[List[User]]] =
+    client
+      .get[List[User]]("search/users", headers, pagination)
 }
