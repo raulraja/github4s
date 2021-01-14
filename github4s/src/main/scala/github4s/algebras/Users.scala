@@ -31,6 +31,15 @@ trait Users[F[_]] {
   def get(username: String, headers: Map[String, String] = Map()): F[GHResponse[User]]
 
   /**
+   * Get information for a particular user by email
+   *
+   * @param email of the user to retrieve
+   * @param headers optional user headers to include in the request
+   * @return GHResponse[User] User details
+   */
+  def getByEmail(email: String, headers: Map[String, String] = Map()): F[GHResponse[User]]
+
+  /**
    * Get information of the authenticated user
    * @param headers optional user headers to include in the request
    * @return GHResponse[User] User details
