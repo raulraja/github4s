@@ -4,10 +4,13 @@
 with Github4s, you can:</p>
 
 <ul>
-  <li><a href="#create-a-new-authorization-token">Create a new authorization token</a></li>
   <li><a href="#authorize-a-url">Authorize a url</a></li>
   <li><a href="#get-an-access-token">Get an access token</a></li>
 </ul>
+
+<p>Previously, you were able to use the authorizations API with a username and password.
+This has been removed from the GitHub API as of November 13, 2020, and has also been removed from Github4s.
+For more information, <a href="https://docs.github.com/en/free-pro-team@latest/rest/overview/other-authentication-methods#via-username-and-password">see this documentation notice</a>.</p>
 
 <p>The following examples assume the following code:</p>
 
@@ -31,38 +34,6 @@ with Github4s, you can:</p>
 
 <p><strong>NOTE</strong>: Above you can see <code class="highlighter-rouge">Github(httpClient, None)</code>. This is due to the fact that if you are
 authenticating for the first time you don’t have any access token yet.</p>
-
-<h3 id="create-a-new-authorization-token">Create a new authorization token</h3>
-
-<p>Used to request a new auth token given basic authentication.</p>
-
-<p>You can create a new authorization token using <code class="highlighter-rouge">newAuth</code>; it takes as arguments:</p>
-
-<ul>
-  <li>basic authentication for the token holder (<code class="highlighter-rouge">username</code> and <code class="highlighter-rouge">password</code>).</li>
-  <li><code class="highlighter-rouge">scopes</code>: attached to the token, for more information see <a href="https://developer.github.com/v3/oauth/#scopes">the scopes doc</a>.</li>
-  <li><code class="highlighter-rouge">note</code>: to remind you what the OAuth token is for.</li>
-  <li><code class="highlighter-rouge">client_id</code>: the 20 character OAuth app client key for which to create the token.</li>
-  <li><code class="highlighter-rouge">client_secret</code>: the 40 character OAuth app client secret for which to create the token.</li>
-</ul>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">newAuth</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">auth</span><span class="o">.</span><span class="py">newAuth</span><span class="o">(</span>
-  <span class="s">"rafaparadela"</span><span class="o">,</span>
-  <span class="s">"invalidPassword"</span><span class="o">,</span>
-  <span class="nc">List</span><span class="o">(</span><span class="s">"public_repo"</span><span class="o">),</span>
-  <span class="s">"New access token"</span><span class="o">,</span>
-  <span class="s">"e8e39175648c9db8c280"</span><span class="o">,</span>
-  <span class="s">"1234567890"</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">newAuth</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
-<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Authorization.scala">Authorization</a> including the created token.</p>
-
-<p>See <a href="https://developer.github.com/v3/oauth_authorizations/#create-a-new-authorization">the API doc</a> for full reference.</p>
 
 <h3 id="authorize-a-url">Authorize a url</h3>
 

@@ -19,6 +19,13 @@ with Github4s, you can interact with:</p>
       <li><a href="#create-a-review">Create a review</a></li>
     </ul>
   </li>
+  <li><a href="#review-requests">Review requests</a>
+    <ul>
+      <li><a href="#add-reviewers">Add reviewers</a></li>
+      <li><a href="#list-reviewers">List reviewers</a></li>
+      <li><a href="#remove-reviewers">Remove reviewers</a></li>
+    </ul>
+  </li>
 </ul>
 
 <p>The following examples assume the following code:</p>
@@ -137,7 +144,7 @@ reference.</p>
 <span class="k">val</span> <span class="nv">createPullRequestData</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">pullRequests</span><span class="o">.</span><span class="py">createPullRequest</span><span class="o">(</span>
   <span class="s">"47deg"</span><span class="o">,</span>
   <span class="s">"github4s"</span><span class="o">,</span>
-  <span class="nc">NewPullRequestData</span><span class="o">(</span><span class="s">"title"</span><span class="o">,</span> <span class="s">"body"</span><span class="o">),</span>
+  <span class="nc">NewPullRequestData</span><span class="o">(</span><span class="s">"title"</span><span class="o">,</span> <span class="s">"body"</span><span class="o">,</span> <span class="n">draft</span> <span class="k">=</span> <span class="kc">false</span><span class="o">),</span>
   <span class="s">"my-branch"</span><span class="o">,</span>
   <span class="s">"base-branch"</span><span class="o">,</span>
   <span class="nc">Some</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span>
@@ -257,6 +264,97 @@ instead of the title and body.</p>
 <p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequestReview</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/pulls/reviews/#create-a-review-for-a-pull-request">the API doc</a> for full reference.</p>
+
+<h2 id="review-requests">Review requests</h2>
+
+<p>This API allows you to operate on review requests. Reviewers can be users and/or teams. Usernames should be used without a leading ‘@’ sign.</p>
+
+<h3 id="add-reviewers">Add reviewers</h3>
+
+<p>You can add reviewers for a pull request using <code class="highlighter-rouge">addReviewers</code>; it takes as arguments:</p>
+
+<ul>
+  <li>the repository coordinates (<code class="highlighter-rouge">owner</code> and <code class="highlighter-rouge">name</code> of the repository).</li>
+  <li>the pull request id.</li>
+  <li>users and teams you want to add as reviewers</li>
+</ul>
+
+<p>As an example, if we wanted to add <code class="highlighter-rouge">torvalds</code> to the reviewers for pull request 139 of <code class="highlighter-rouge">47degrees/github4s</code>:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">github4s.domain._</span>
+<span class="k">val</span> <span class="nv">addReviewers</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">pullRequests</span><span class="o">.</span><span class="py">addReviewers</span><span class="o">(</span>
+  <span class="s">"47deg"</span><span class="o">,</span>
+  <span class="s">"github4s"</span><span class="o">,</span>
+  <span class="mi">139</span><span class="o">,</span>
+  <span class="nc">ReviewersRequest</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="s">"torvalds"</span><span class="o">)))</span>
+<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">addReviewers</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
+<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">result</code> on the right is the updated <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequest</a>.</p>
+
+<p><strong>NOTE</strong>: you can’t request a review from the pr’s author. If your list of added reviewers contains the author, the whole request will be declined.</p>
+
+<p>See <a href="https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#request-reviewers-for-a-pull-request">the API doc</a> for full reference.</p>
+
+<h3 id="list-reviewers">List reviewers</h3>
+
+<p>You can list the reviewers for a pull request using <code class="highlighter-rouge">listReviewers</code>; it takes as arguments:</p>
+
+<ul>
+  <li>the repository coordinates (<code class="highlighter-rouge">owner</code> and <code class="highlighter-rouge">name</code> of the repository).</li>
+  <li>the pull request id.</li>
+</ul>
+
+<p>As an example, if we wanted to see all the reviewers for pull request 139 of <code class="highlighter-rouge">47degrees/github4s</code>:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">github4s.domain._</span>
+<span class="k">val</span> <span class="nv">listReviewers</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">pullRequests</span><span class="o">.</span><span class="py">listReviewers</span><span class="o">(</span>
+  <span class="s">"47deg"</span><span class="o">,</span>
+  <span class="s">"github4s"</span><span class="o">,</span>
+  <span class="mi">139</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">listReviewers</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
+<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">result</code> on the right is the matching ReviewersResponse, which contains all users and teams, whose review has been requested.</p>
+
+<p>See <a href="https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#list-requested-reviewers-for-a-pull-request">the API doc</a> for full reference.</p>
+
+<h3 id="remove-reviewers">Remove reviewers</h3>
+
+<p>You can remove reviewers from a pull request using <code class="highlighter-rouge">removeReviewers</code>; it takes as arguments:</p>
+
+<ul>
+  <li>the repository coordinates (<code class="highlighter-rouge">owner</code> and <code class="highlighter-rouge">name</code> of the repository).</li>
+  <li>the pull request id.</li>
+  <li>users and teams you want to remove from reviewers</li>
+</ul>
+
+<p>As an example, if we wanted to remove <code class="highlighter-rouge">torvalds</code> from the reviewers for pull request 139 of <code class="highlighter-rouge">47degrees/github4s</code>:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">github4s.domain._</span>
+<span class="k">val</span> <span class="nv">removeReviewers</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">pullRequests</span><span class="o">.</span><span class="py">removeReviewers</span><span class="o">(</span>
+  <span class="s">"47deg"</span><span class="o">,</span>
+  <span class="s">"github4s"</span><span class="o">,</span>
+  <span class="mi">139</span><span class="o">,</span>
+  <span class="nc">ReviewersRequest</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="s">"torvalds"</span><span class="o">)))</span>
+<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">removeReviewers</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
+<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">result</code> on the right is the updated <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequest</a>.</p>
+
+<p>See <a href="https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#remove-requested-reviewers-from-a-pull-request">the API doc</a> for full reference.</p>
 
 <p>As you can see, a few features of the pull request endpoint are missing. As a result, if you’d like
 to see a feature supported, feel free to create an issue and/or a pull request!</p>
