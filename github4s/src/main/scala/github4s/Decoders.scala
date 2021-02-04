@@ -108,7 +108,7 @@ object Decoders {
     }
   }
 
-  implicit val decodeRepository: Decoder[Repository] = {
+  implicit val decodeRepositoryBase: Decoder[RepositoryBase] = {
 
     Decoder.instance { c =>
       for {
@@ -146,7 +146,7 @@ object Decoders {
         clone_url         <- c.downField("clone_url").as[String]
         svn_url           <- c.downField("svn_url").as[String]
         repoUrls          <- readRepoUrls(c)
-      } yield Repository(
+      } yield RepositoryBase(
         id = id,
         name = name,
         full_name = full_name,
@@ -188,6 +188,12 @@ object Decoders {
       )
     }
   }
+
+  implicit val decodeRepository: Decoder[Repository] = for {
+    base   <- decodeRepositoryBase
+    parent <- Decoder[Option[RepositoryBase]].at("parent")
+    source <- Decoder[Option[RepositoryBase]].at("source")
+  } yield Repository.fromBaseRepos(base, parent, source)
 
   implicit val decodePRStatus: Decoder[PullRequestReviewState] =
     Decoder.decodeString.map {

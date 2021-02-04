@@ -16,7 +16,8 @@
 
 package github4s.domain
 
-final case class Repository(
+/** A `Repository` but without any recursive definitions (`parent` and `source`) */
+final case class RepositoryBase(
     id: Long,
     name: String,
     full_name: String,
@@ -35,6 +36,57 @@ final case class Repository(
     organization: Option[User] = None,
     permissions: Option[RepoPermissions] = None
 )
+
+final case class Repository(
+    id: Long,
+    name: String,
+    full_name: String,
+    owner: User,
+    `private`: Boolean,
+    fork: Boolean,
+    archived: Boolean,
+    urls: RepoUrls,
+    created_at: String,
+    updated_at: String,
+    pushed_at: String,
+    status: RepoStatus,
+    description: Option[String] = None,
+    homepage: Option[String] = None,
+    language: Option[String] = None,
+    organization: Option[User] = None,
+    parent: Option[RepositoryBase] = None,
+    permissions: Option[RepoPermissions] = None,
+    source: Option[RepositoryBase] = None
+)
+
+object Repository {
+  def fromBaseRepos(
+      b: RepositoryBase,
+      parent: Option[RepositoryBase],
+      source: Option[RepositoryBase]
+  ) =
+    Repository(
+      b.id,
+      b.name,
+      b.full_name,
+      b.owner,
+      b.`private`,
+      b.fork,
+      b.archived,
+      b.urls,
+      b.created_at,
+      b.updated_at,
+      b.pushed_at,
+      b.status,
+      b.description,
+      b.homepage,
+      b.language,
+      b.organization,
+      parent,
+      b.permissions,
+      source
+    )
+}
 
 final case class RepoPermissions(
     admin: Boolean,
