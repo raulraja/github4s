@@ -236,12 +236,6 @@ trait TestData {
     items = List(issue)
   )
 
-  val searchReposResult = SearchReposResult(
-    total_count = 1,
-    incomplete_results = false,
-    items = List(repo)
-  )
-
   val pullRequest = PullRequest(
     id = 1,
     number = validPullRequestNumber,
@@ -399,6 +393,12 @@ trait TestData {
     "2011-01-26T19:06:43Z",
     RepoStatus(108, 80, 80, 9, 0, true, true, false, true),
     Some(validNote)
+  )
+
+  val searchReposResult = SearchReposResult(
+    total_count = 1,
+    incomplete_results = false,
+    items = List(repo)
   )
 
   val commit = Commit(
