@@ -74,12 +74,14 @@ trait Repositories[F[_]] {
    *
    * @param query The query string for the search.
    * @param searchParams List of search params.
+   * @param pagination Limit and Offset for pagination
    * @param headers Optional headers to include in the request.
    * @return A GHResponse with the result of the search
    */
   def searchRepos(
       query: String,
       searchParams: List[SearchParam],
+      pagination: Option[Pagination] = None,
       headers: Map[String, String] = Map.empty
   ): F[GHResponse[SearchReposResult]]
 

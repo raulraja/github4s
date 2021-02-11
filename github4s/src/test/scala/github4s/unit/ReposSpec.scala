@@ -445,6 +445,6 @@ class ReposSpec extends BaseSpec {
 
     val repos = new RepositoriesInterpreter[IO]
 
-    repos.searchRepos("", validSearchParams, headerUserAgent)
+    repos.searchRepos("", validSearchParams, None, headerUserAgent)
   }
 }

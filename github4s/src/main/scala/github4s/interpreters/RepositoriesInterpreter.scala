@@ -68,12 +68,14 @@ class RepositoriesInterpreter[F[_]: Functor](implicit
   override def searchRepos(
       query: String,
       searchParams: List[SearchParam],
+      pagination: Option[Pagination],
       headers: Map[String, String] = Map.empty
   ): F[GHResponse[SearchReposResult]] =
     client.get[SearchReposResult](
       "search/repositories",
       headers,
-      params = Map("q" -> s"${encode(query, "utf-8")}+${searchParams.map(_.value).mkString("+")}")
+      params = Map("q" -> s"${encode(query, "utf-8")}+${searchParams.map(_.value).mkString("+")}"),
+      pagination
     )
 
   override def getContents(

@@ -457,7 +457,7 @@ trait ReposSpec extends BaseIntegrationSpec {
     val response = clientResource
       .use { client =>
         Github[IO](client, accessToken).repos
-          .searchRepos("github4s", Nil, headerUserAgent)
+          .searchRepos("github4s", Nil, None, headerUserAgent)
       }
       .unsafeRunSync()
 
@@ -475,7 +475,7 @@ trait ReposSpec extends BaseIntegrationSpec {
     val response = clientResource
       .use { client =>
         Github[IO](client, accessToken).repos
-          .searchRepos(nonExistentSearchQuery, validSearchParams, headerUserAgent)
+          .searchRepos(nonExistentSearchQuery, validSearchParams, None, headerUserAgent)
       }
       .unsafeRunSync()
 
