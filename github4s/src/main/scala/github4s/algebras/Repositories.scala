@@ -70,6 +70,20 @@ trait Repositories[F[_]] {
   ): F[GHResponse[List[Repository]]]
 
   /**
+   * Search all repositories on GitHub.
+   *
+   * @param query The query string for the search.
+   * @param searchParams List of search params.
+   * @param headers Optional headers to include in the request.
+   * @return A GHResponse with the result of the search
+   */
+  def searchRepos(
+      query: String,
+      searchParams: List[SearchParam],
+      headers: Map[String, String] = Map.empty
+  ): F[GHResponse[SearchReposResult]]
+
+  /**
    * Get the contents of a file or directory in a repository.
    *
    * The response could be a:

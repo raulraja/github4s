@@ -236,6 +236,12 @@ trait TestData {
     items = List(issue)
   )
 
+  val searchReposResult = SearchReposResult(
+    total_count = 1,
+    incomplete_results = false,
+    items = List(repo)
+  )
+
   val pullRequest = PullRequest(
     id = 1,
     number = validPullRequestNumber,

@@ -452,4 +452,40 @@ trait ReposSpec extends BaseIntegrationSpec {
     testIsLeft[NotFoundError, List[Status]](response)
     response.statusCode shouldBe notFoundStatusCode
   }
+
+  "Repos >> Search" should "return at least one repository for a valid query" taggedAs Integration in {
+    val response = clientResource
+      .use { client =>
+        Github[IO](client, accessToken).repos
+          .searchRepos(validSearchQuery, validSearchParams, headerUserAgent)
+      }
+      .unsafeRunSync()
+
+    testIsRight[SearchReposResult](
+      response,
+      { r =>
+        r.total_count > 0 shouldBe true
+        r.items.nonEmpty shouldBe true
+      }
+    )
+    response.statusCode shouldBe okStatusCode
+  }
+
+  it should "return an empty result for a non existent query string" taggedAs Integration in {
+    val response = clientResource
+      .use { client =>
+        Github[IO](client, accessToken).repos
+          .searchRepos(nonExistentSearchQuery, validSearchParams, headerUserAgent)
+      }
+      .unsafeRunSync()
+
+    testIsRight[SearchReposResult](
+      response,
+      { r =>
+        r.total_count shouldBe 0
+        r.items.nonEmpty shouldBe false
+      }
+    )
+    response.statusCode shouldBe okStatusCode
+  }
 }
