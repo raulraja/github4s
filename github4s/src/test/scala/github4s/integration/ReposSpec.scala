@@ -458,7 +458,7 @@ trait ReposSpec extends BaseIntegrationSpec {
     val response = clientResource
       .use { client =>
         Github[IO](client, accessToken).repos
-          .searchRepos("github4s", params, None, headerUserAgent)
+          .searchRepos("sbt-microsites", params, None, headerUserAgent)
       }
       .unsafeRunSync()
 
