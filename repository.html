@@ -7,6 +7,7 @@ with Github4s, you can interact with:</p>
   <li><a href="#repositories">Repositories</a>
     <ul>
       <li><a href="#get-a-repository">Get a repository</a></li>
+      <li><a href="#search-repositories">Search repositories</a></li>
       <li><a href="#list-organization-repositories">List organization repositories</a></li>
       <li><a href="#list-user-repositories">List user repositories</a></li>
       <li><a href="#list-contributors">List contributors</a></li>
@@ -90,6 +91,26 @@ with Github4s, you can interact with:</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/#get">the API doc</a> for full
 reference.</p>
+
+<h3 id="search-repositories">Search repositories</h3>
+
+<p>You can globally search repositories using <code class="highlighter-rouge">searchRepos</code>; it takes as arguments:</p>
+
+<ul>
+  <li>a <code class="highlighter-rouge">query</code> string (the URL encoding is taken care of by Github4s).</li>
+  <li>a list of <a href="https://github.com/47degrees/github4s/blob/master/github4s/shared/src/main/scala/github4s/free/domain/SearchParam.scala">SearchParam</a>.</li>
+  <li><code class="highlighter-rouge">pagination</code>: Limit and Offset for pagination.</li>
+</ul>
+
+<p>To search repositories on GitHub:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">searchRepos</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">searchRepos</span><span class="o">(</span><span class="s">"github4s"</span><span class="o">,</span> <span class="nc">Nil</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">searchRepos</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
+<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <h3 id="list-organization-repositories">List organization repositories</h3>
 
@@ -319,7 +340,7 @@ reference.</p>
 
 <p>To get contents:</p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">getContents</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">getContents</span><span class="o">(</span><span class="s">"47degrees"</span><span class="o">,</span> <span class="s">"github4s"</span><span class="o">,</span> <span class="s">"README.md"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"heads/master"</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">getContents</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">getContents</span><span class="o">(</span><span class="s">"47degrees"</span><span class="o">,</span> <span class="s">"github4s"</span><span class="o">,</span> <span class="s">"README.md"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"s/master"</span><span class="o">))</span>
 <span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">getContents</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
 <span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
   <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
