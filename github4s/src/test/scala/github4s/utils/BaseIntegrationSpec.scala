@@ -16,11 +16,11 @@
 
 package github4s.utils
 
-import cats.effect.{ContextShift, IO, Resource, Timer}
-import github4s.{GHError, GHResponse, IOAssertions}
+import cats.effect.{unsafe, IO, Resource}
 import github4s.integration._
+import github4s.{GHError, GHResponse, IOAssertions}
+import org.http4s.blaze.client.BlazeClientBuilder
 import org.http4s.client.Client
-import org.http4s.client.blaze.BlazeClientBuilder
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.{Assertion, Ignore, Inspectors, Tag}
@@ -57,8 +57,7 @@ abstract class BaseIntegrationSpec
   override val executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
 
-  protected implicit val CS: ContextShift[IO] = IO.contextShift(executionContext)
-  protected implicit val timer: Timer[IO]     = IO.timer(executionContext)
+  protected implicit val ioRuntime: unsafe.IORuntime = unsafe.IORuntime.global
 
   val clientResource: Resource[IO, Client[IO]] = BlazeClientBuilder[IO](executionContext).resource
 

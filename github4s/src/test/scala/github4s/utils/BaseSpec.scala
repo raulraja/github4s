@@ -16,8 +16,7 @@
 
 package github4s.utils
 
-import cats.effect.{ContextShift, IO, Timer}
-import cats.syntax.all._
+import cats.effect.{unsafe, IO}
 import github4s.http.HttpClient
 import github4s.interpreters.StaticAccessToken
 import github4s.{GithubConfig, IOAssertions}
@@ -27,6 +26,7 @@ import org.http4s.syntax.all._
 import org.http4s._
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.typelevel.ci.CIString
 
 import scala.concurrent.ExecutionContext
 
@@ -36,8 +36,7 @@ trait BaseSpec extends AsyncFlatSpec with Matchers with TestData with IOAssertio
   import org.http4s.dsl.io._
 
   protected implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
-  protected implicit val CS: ContextShift[IO] = IO.contextShift(ec)
-  protected implicit val timer: Timer[IO]     = IO.timer(ec)
+  protected implicit val ioRuntime: unsafe.IORuntime = unsafe.IORuntime.global
   protected val dummyConfig: GithubConfig = GithubConfig(
     baseUrl = "http://127.0.0.1:9999/",
     authorizeUrl = "http://127.0.0.1:9999/authorize?client_id=%s&redirect_uri=%s&scope=%s&state=%s",
@@ -45,7 +44,7 @@ trait BaseSpec extends AsyncFlatSpec with Matchers with TestData with IOAssertio
     Map.empty
   )
 
-  private val userAgent = headerUserAgent.toList.map((Header.apply _).tupled)
+  private val userAgent = headerUserAgent.toList.map { case (k, v) => Header.Raw(CIString(k), v) }
 
   protected def httpClientMockGet[Out: Encoder](
       url: String,
@@ -58,13 +57,9 @@ trait BaseSpec extends AsyncFlatSpec with Matchers with TestData with IOAssertio
     val httpClientMock = httpMock {
       case req
           if req.uri == Uri.unsafeFromString(url) &&
-            req.headers == Headers(userAgent) ++ Headers(
-              headers.toList.map((Header.apply _).tupled)
-            ) &&
+            (req.headers == (Headers(userAgent) ++ Headers(headers.toList))) &&
             req.params == params =>
-        response.map(body =>
-          Response[IO](responseStatus).withEntity(body).putHeaders(respHeaders.toList: _*)
-        )
+        response.map(body => Response[IO](responseStatus).withEntity(body).putHeaders(respHeaders))
     }
     new HttpClient(httpClientMock, dummyConfig, new StaticAccessToken(sampleToken))
   }
@@ -79,7 +74,7 @@ trait BaseSpec extends AsyncFlatSpec with Matchers with TestData with IOAssertio
       case req
           if req.uri == Uri.unsafeFromString(url) &&
             req.headers == Headers(userAgent) =>
-        response.map(_ => Response[IO](responseStatus).putHeaders(respHeaders.toList: _*))
+        response.map(_ => Response[IO](responseStatus).putHeaders(respHeaders))
     }
     new HttpClient(httpClientMock, dummyConfig, new StaticAccessToken(sampleToken))
   }
@@ -103,9 +98,7 @@ trait BaseSpec extends AsyncFlatSpec with Matchers with TestData with IOAssertio
       case req @ POST -> _
           if req.uri == Uri.unsafeFromString(url) &&
             req.headers == Headers(userAgent) =>
-        response.map(body =>
-          Response[IO](responseStatus).withEntity(body).putHeaders(respHeaders.toList: _*)
-        )
+        response.map(body => Response[IO](responseStatus).withEntity(body).putHeaders(respHeaders))
     }
 
     new HttpClient(httpClientMock, dummyConfig, new StaticAccessToken(sampleToken))
@@ -140,7 +133,7 @@ trait BaseSpec extends AsyncFlatSpec with Matchers with TestData with IOAssertio
       case req @ DELETE -> _
           if req.uri == Uri.unsafeFromString(url) &&
             req.headers == Headers(userAgent) =>
-        response.as(Response[IO](responseStatus).putHeaders(respHeaders.toList: _*))
+        response.as(Response[IO](responseStatus).putHeaders(respHeaders))
     }
     new HttpClient(httpClientMock, dummyConfig, new StaticAccessToken(sampleToken))
   }
@@ -155,9 +148,7 @@ trait BaseSpec extends AsyncFlatSpec with Matchers with TestData with IOAssertio
       case req @ DELETE -> _
           if req.uri == Uri.unsafeFromString(url) &&
             req.headers == Headers(userAgent) =>
-        response.map(body =>
-          Response[IO](responseStatus).withEntity(body).putHeaders(respHeaders.toList: _*)
-        )
+        response.map(body => Response[IO](responseStatus).withEntity(body).putHeaders(respHeaders))
     }
     new HttpClient(httpClientMock, dummyConfig, new StaticAccessToken(sampleToken))
   }
@@ -193,7 +184,7 @@ trait BaseSpec extends AsyncFlatSpec with Matchers with TestData with IOAssertio
             )
           )
         validate >> response.map(body =>
-          Response[IO](responseStatus).withEntity(body).putHeaders(respHeaders.toList: _*)
+          Response[IO](responseStatus).withEntity(body).putHeaders(respHeaders)
         )
     }
     new HttpClient(httpClientMock, dummyConfig, new StaticAccessToken(sampleToken))
