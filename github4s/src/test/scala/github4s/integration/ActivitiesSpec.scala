@@ -143,4 +143,23 @@ trait ActivitiesSpec extends BaseIntegrationSpec {
     testIsLeft[NotFoundError, List[StarredRepository]](response)
     response.statusCode shouldBe notFoundStatusCode
   }
+
+
+  "Activity >> ListWatchedRepositories" should "return the expected list of watched repos" taggedAs Integration in {
+    val response = clientResource
+      .use { client =>
+        Github[IO](client, accessToken).activities
+          .listWatchedRespositories(validUsername, None, headers = headerUserAgent)
+      }
+      .unsafeRunSync()
+
+      testIsRight[List[WatchedRepository]](
+      response,
+      { r =>
+        r.nonEmpty shouldBe true
+      }
+    )
+    response.statusCode shouldBe okStatusCode
+  }
+
 }
