@@ -41,5 +41,5 @@ final case class StarredRepository(
 )
 
 final case class WatchedRepository(
-  repo: Repository
+    repo: Repository
 )

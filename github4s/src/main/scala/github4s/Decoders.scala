@@ -242,17 +242,16 @@ object Decoders {
         )
       )
 
-
   implicit val decodeWatchedRepository: Decoder[WatchedRepository] =
     Decoder[Repository]
       .map(WatchedRepository(_))
       .or(
         Decoder.instance(c =>
           for {
-            repo       <- c.downField("repo").as[Repository]
-          } yield WatchedRepository(repo))
+            repo <- c.downField("repo").as[Repository]
+          } yield WatchedRepository(repo)
         )
-
+      )
 
   implicit def decodeNonEmptyList[T](implicit D: Decoder[T]): Decoder[NonEmptyList[T]] = {
 

@@ -71,10 +71,10 @@ class ActivitiesInterpreter[F[_]](implicit client: HttpClient[F]) extends Activi
     )
 
   override def listWatchedRespositories(
-    username: String,
-    pagination: Option[Pagination],
-    headers: Map[String, String]
-  ): F[GHResponse[List[WatchedRepository]]] =    
+      username: String,
+      pagination: Option[Pagination],
+      headers: Map[String, String]
+  ): F[GHResponse[List[WatchedRepository]]] =
     client.get[List[WatchedRepository]](
       s"users/$username/subscriptions",
       headers = headers,

@@ -144,7 +144,6 @@ trait ActivitiesSpec extends BaseIntegrationSpec {
     response.statusCode shouldBe notFoundStatusCode
   }
 
-
   "Activity >> ListWatchedRepositories" should "return the expected list of watched repos" taggedAs Integration in {
     val response = clientResource
       .use { client =>
@@ -153,11 +152,9 @@ trait ActivitiesSpec extends BaseIntegrationSpec {
       }
       .unsafeRunSync()
 
-      testIsRight[List[WatchedRepository]](
+    testIsRight[List[WatchedRepository]](
       response,
-      { r =>
-        r.nonEmpty shouldBe true
-      }
+      r => r.nonEmpty shouldBe true
     )
     response.statusCode shouldBe okStatusCode
   }

@@ -85,9 +85,9 @@ trait Activities[F[_]] {
    * @return GHResponse with the list of starred repositories for this user
    */
   def listWatchedRespositories(
-    username: String,
-    pagination: Option[Pagination],
-    headers: Map[String, String] = Map()
+      username: String,
+      pagination: Option[Pagination],
+      headers: Map[String, String] = Map()
   ): F[GHResponse[List[WatchedRepository]]]
 
 }
