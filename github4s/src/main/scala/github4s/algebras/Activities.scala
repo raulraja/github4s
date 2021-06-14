@@ -86,7 +86,7 @@ trait Activities[F[_]] {
    */
   def listWatchedRespositories(
       username: String,
-      pagination: Option[Pagination],
+      pagination: Option[Pagination] = None,
       headers: Map[String, String] = Map()
   ): F[GHResponse[List[WatchedRepository]]]
 
