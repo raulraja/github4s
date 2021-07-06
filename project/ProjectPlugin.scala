@@ -15,7 +15,6 @@ object ProjectPlugin extends AutoPlugin {
 
     lazy val V = new {
       val bm4                     = "0.3.1"
-      val base64: String          = "0.3.0"
       val cats: String            = "2.6.1"
       val circe: String           = "0.14.1"
       val expecty                 = "0.15.4"
@@ -69,20 +68,19 @@ object ProjectPlugin extends AutoPlugin {
 
     lazy val coreDeps = Seq(
       libraryDependencies ++= Seq(
-        "org.typelevel"         %% "cats-core"           % V.cats,
-        "io.circe"              %% "circe-core"          % V.circe,
-        "io.circe"              %% "circe-generic"       % V.circe,
-        "com.github.marklister" %% "base64"              % V.base64,
-        "org.http4s"            %% "http4s-client"       % V.http4s,
-        "org.http4s"            %% "http4s-circe"        % V.http4s,
-        "io.circe"              %% "circe-parser"        % V.circe                   % Test,
-        "com.eed3si9n.expecty"  %% "expecty"             % V.expecty                 % Test,
-        "org.scalatest"         %% "scalatest"           % V.scalatest               % Test,
-        "org.http4s"            %% "http4s-blaze-client" % V.http4s                  % Test,
-        "org.http4s"            %% "http4s-dsl"          % V.http4s                  % Test,
-        "org.http4s"            %% "http4s-server"       % V.http4s                  % Test,
-        "org.scalacheck"        %% "scalacheck"          % V.scalacheck              % Test,
-        "org.scalatestplus"     %% "scalacheck-1-15"     % V.scalacheckPlusScalatest % Test
+        "org.typelevel"        %% "cats-core"           % V.cats,
+        "io.circe"             %% "circe-core"          % V.circe,
+        "io.circe"             %% "circe-generic"       % V.circe,
+        "org.http4s"           %% "http4s-client"       % V.http4s,
+        "org.http4s"           %% "http4s-circe"        % V.http4s,
+        "io.circe"             %% "circe-parser"        % V.circe                   % Test,
+        "com.eed3si9n.expecty" %% "expecty"             % V.expecty                 % Test,
+        "org.scalatest"        %% "scalatest"           % V.scalatest               % Test,
+        "org.http4s"           %% "http4s-blaze-client" % V.http4s                  % Test,
+        "org.http4s"           %% "http4s-dsl"          % V.http4s                  % Test,
+        "org.http4s"           %% "http4s-server"       % V.http4s                  % Test,
+        "org.scalacheck"       %% "scalacheck"          % V.scalacheck              % Test,
+        "org.scalatestplus"    %% "scalacheck-1-15"     % V.scalacheckPlusScalatest % Test
       ),
       libraryDependencies ++= on(2, 12)(
         compilerPlugin("org.scalamacros" %% "paradise" % V.paradise cross CrossVersion.full)

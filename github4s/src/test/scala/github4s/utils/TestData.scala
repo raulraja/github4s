@@ -18,7 +18,7 @@ package github4s.utils
 
 import java.util.UUID
 
-import com.github.marklister.base64.Base64._
+import github4s.internal.Base64._
 import github4s.domain._
 
 trait TestData {

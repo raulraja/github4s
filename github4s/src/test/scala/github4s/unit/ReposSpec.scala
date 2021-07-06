@@ -22,7 +22,7 @@ import github4s.Decoders._
 import github4s.Encoders._
 import github4s.domain._
 import github4s.http.HttpClient
-import com.github.marklister.base64.Base64._
+import github4s.internal.Base64._
 import github4s.interpreters.RepositoriesInterpreter
 import github4s.utils.BaseSpec
 import org.http4s
