@@ -14,14 +14,17 @@ object ProjectPlugin extends AutoPlugin {
   object autoImport {
 
     lazy val V = new {
-      val base64: String    = "0.3.0"
-      val cats: String      = "2.6.1"
-      val circe: String     = "0.14.1"
-      val http4s: String    = "0.21.24"
-      val paradise: String  = "2.1.1"
-      val scalamock: String = "5.1.0"
-      val scalatest: String = "3.2.9"
-      val silencer: String  = "1.7.1"
+      val bm4                     = "0.3.1"
+      val base64: String          = "0.3.0"
+      val cats: String            = "2.6.1"
+      val circe: String           = "0.14.1"
+      val expecty                 = "0.15.4"
+      val http4s: String          = "0.21.24"
+      val paradise: String        = "2.1.1"
+      val scalacheck              = "1.15.4"
+      val scalacheckShapeless     = "1.3.0"
+      val scalacheckPlusScalatest = "3.2.9.0"
+      val scalatest: String       = "3.2.9"
     }
 
     lazy val docsMappingsAPIDir: SettingKey[String] =
@@ -69,19 +72,26 @@ object ProjectPlugin extends AutoPlugin {
         "org.typelevel"         %% "cats-core"           % V.cats,
         "io.circe"              %% "circe-core"          % V.circe,
         "io.circe"              %% "circe-generic"       % V.circe,
-        "io.circe"              %% "circe-literal"       % V.circe,
         "com.github.marklister" %% "base64"              % V.base64,
         "org.http4s"            %% "http4s-client"       % V.http4s,
         "org.http4s"            %% "http4s-circe"        % V.http4s,
-        "io.circe"              %% "circe-parser"        % V.circe     % Test,
-        "org.scalamock"         %% "scalamock"           % V.scalamock % Test,
-        "org.scalatest"         %% "scalatest"           % V.scalatest % Test,
-        "org.http4s"            %% "http4s-blaze-client" % V.http4s    % Test,
-        "com.github.ghik"        % "silencer-lib"        % V.silencer  % Provided cross CrossVersion.full,
-        compilerPlugin("com.github.ghik" % "silencer-plugin" % V.silencer cross CrossVersion.full)
+        "io.circe"              %% "circe-parser"        % V.circe                   % Test,
+        "com.eed3si9n.expecty"  %% "expecty"             % V.expecty                 % Test,
+        "org.scalatest"         %% "scalatest"           % V.scalatest               % Test,
+        "org.http4s"            %% "http4s-blaze-client" % V.http4s                  % Test,
+        "org.http4s"            %% "http4s-dsl"          % V.http4s                  % Test,
+        "org.http4s"            %% "http4s-server"       % V.http4s                  % Test,
+        "org.scalacheck"        %% "scalacheck"          % V.scalacheck              % Test,
+        "org.scalatestplus"     %% "scalacheck-1-15"     % V.scalacheckPlusScalatest % Test
       ),
       libraryDependencies ++= on(2, 12)(
         compilerPlugin("org.scalamacros" %% "paradise" % V.paradise cross CrossVersion.full)
+      ).value,
+      libraryDependencies ++= on(2)(
+        "com.github.alexarchambault" %% "scalacheck-shapeless_1.15" % V.scalacheckShapeless % Test
+      ).value,
+      libraryDependencies ++= on(2)(
+        compilerPlugin("com.olegpy" %% "better-monadic-for" % V.bm4)
       ).value
     )
 
@@ -98,6 +108,14 @@ object ProjectPlugin extends AutoPlugin {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some(v) if v == (major, minor) => Seq(a)
         case _                              => Nil
+      }
+    }
+
+  def on[A](major: Int)(a: A): Def.Initialize[Seq[A]] =
+    Def.setting {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some(v) if v._1 == major => Seq(a)
+        case _                        => Nil
       }
     }
 }

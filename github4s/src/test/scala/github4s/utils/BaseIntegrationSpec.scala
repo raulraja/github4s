@@ -16,8 +16,8 @@
 
 package github4s.utils
 
-import cats.effect.{ContextShift, IO, Resource}
-import github4s.{GHError, GHResponse}
+import cats.effect.{ContextShift, IO, Resource, Timer}
+import github4s.{GHError, GHResponse, IOAssertions}
 import github4s.integration._
 import org.http4s.client.Client
 import org.http4s.client.blaze.BlazeClientBuilder
@@ -51,21 +51,24 @@ abstract class BaseIntegrationSpec
     extends AsyncFlatSpec
     with Matchers
     with Inspectors
-    with TestData {
+    with TestData
+    with IOAssertions {
 
   override val executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
 
-  implicit val ioContextShift: ContextShift[IO] = IO.contextShift(executionContext)
+  protected implicit val CS: ContextShift[IO] = IO.contextShift(executionContext)
+  protected implicit val timer: Timer[IO]     = IO.timer(executionContext)
 
   val clientResource: Resource[IO, Client[IO]] = BlazeClientBuilder[IO](executionContext).resource
 
   def accessToken: Option[String] = sys.env.get("GITHUB_TOKEN")
 
   def testIsRight[A](response: GHResponse[A], f: A => Assertion = (_: A) => succeed): Assertion = {
-    response.result.isRight shouldBe true
-    response.result.toOption map (f(_)) match {
-      case _ => succeed
+    withClue(response.result) {
+      response.result.toOption map (f(_)) match {
+        case _ => succeed
+      }
     }
   }
 
