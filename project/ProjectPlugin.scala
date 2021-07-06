@@ -18,12 +18,13 @@ object ProjectPlugin extends AutoPlugin {
       val cats: String            = "2.6.1"
       val circe: String           = "0.14.1"
       val expecty                 = "0.15.4"
-      val http4s: String          = "0.21.24"
+      val http4s: String          = "0.23.0-RC1"
       val paradise: String        = "2.1.1"
       val scalacheck              = "1.15.4"
       val scalacheckShapeless     = "1.3.0"
       val scalacheckPlusScalatest = "3.2.9.0"
       val scalatest: String       = "3.2.9"
+      val shapeless3              = "3.0.1"
     }
 
     lazy val docsMappingsAPIDir: SettingKey[String] =
@@ -56,14 +57,17 @@ object ProjectPlugin extends AutoPlugin {
         )
       ),
       micrositeExtraMdFilesOutput := mdocIn.value,
-      includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.md" | "*.svg",
+      makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.md" | "*.svg",
       scalacOptions ~= (_ filterNot Set(
         "-Ywarn-unused-import",
         "-Xlint",
         "-Xfatal-warnings"
       ).contains),
-      docsMappingsAPIDir in ScalaUnidoc := "api",
-      addMappingsToSiteDir(mappings in (ScalaUnidoc, packageDoc), docsMappingsAPIDir in ScalaUnidoc)
+      ScalaUnidoc / docsMappingsAPIDir := "api",
+      addMappingsToSiteDir(
+        ScalaUnidoc / packageDoc / mappings,
+        ScalaUnidoc / docsMappingsAPIDir
+      )
     )
 
     lazy val coreDeps = Seq(
@@ -90,6 +94,9 @@ object ProjectPlugin extends AutoPlugin {
       ).value,
       libraryDependencies ++= on(2)(
         compilerPlugin("com.olegpy" %% "better-monadic-for" % V.bm4)
+      ).value,
+      libraryDependencies ++= on(3)(
+        "org.typelevel" %% "shapeless3-deriving" % V.shapeless3 % Test
       ).value
     )
 

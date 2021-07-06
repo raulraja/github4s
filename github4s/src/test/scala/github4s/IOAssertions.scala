@@ -1,7 +1,7 @@
 package github4s
 
 import cats.Eq
-import cats.effect.{ContextShift, IO, Timer}
+import cats.effect.{unsafe, IO}
 import org.scalactic.Prettifier
 import org.scalactic.source.Position
 import org.scalatest.exceptions.TestFailedException
@@ -19,7 +19,8 @@ trait IOAssertions { self: AsyncTestSuite with org.scalatest.Assertions =>
   // It's "extremely unsafe" because it's an implicit conversion that takes a pure value
   // and silently converts it to a side effecting value that begins running on a thread immediately.
   implicit def extremelyUnsafeIOAssertionToFuture(ioa: IO[Assertion])(implicit
-      pos: Position
+      pos: Position,
+      ioRuntime: unsafe.IORuntime
   ): Future[Assertion] = {
     val _ = pos // unused here; exists for override to use
     ioa.unsafeToFuture()
@@ -62,7 +63,7 @@ trait IOAssertions { self: AsyncTestSuite with org.scalatest.Assertions =>
 
     def shouldTerminate(
         within: FiniteDuration = 5.seconds
-    )(implicit timer: Timer[IO], CS: ContextShift[IO]): IO[Assertion] =
+    ): IO[Assertion] =
       io.shouldNotFail.timeoutTo(within, IO(fail(s"IO didn't terminate within $within")))
 
     /**
