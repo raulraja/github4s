@@ -25,23 +25,16 @@ headers of the response:</p>
 <span class="o">)</span>
 </code></pre></div></div>
 
-<p>To make HTTP calls, Github4s relies on <a href="https://http4s.org/v0.21/client/">an http4s’ HTTP client</a> which needs to be
+<p>To make HTTP calls, Github4s relies on <a href="https://http4s.org/v0.23/client/">an http4s’ HTTP client</a> which needs to be
 supplied as we’ll see later. Here, we are making use of <code class="highlighter-rouge">JavaNetClientBuilder</code> because of its ease
 of use in a REPL. However, for production use you should prefer <code class="highlighter-rouge">BlazeClientBuilder</code> over it as
-detailed in <a href="https://http4s.org/v0.21/client/">the documentation</a>.</p>
+detailed in <a href="https://http4s.org/v0.23/client/">the documentation</a>.</p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">java.util.concurrent.Executors</span>
-
-<span class="k">import</span> <span class="nn">cats.effect.</span><span class="o">{</span><span class="nc">Blocker</span><span class="o">,</span> <span class="nc">ContextShift</span><span class="o">,</span> <span class="nc">IO</span><span class="o">}</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.effect.IO</span>
 <span class="k">import</span> <span class="nn">org.http4s.client.</span><span class="o">{</span><span class="nc">Client</span><span class="o">,</span> <span class="nc">JavaNetClientBuilder</span><span class="o">}</span>
 
-<span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.global</span>
-
 <span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-  <span class="k">val</span> <span class="nv">blockingPool</span> <span class="k">=</span> <span class="nv">Executors</span><span class="o">.</span><span class="py">newFixedThreadPool</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-  <span class="k">val</span> <span class="nv">blocker</span> <span class="k">=</span> <span class="nv">Blocker</span><span class="o">.</span><span class="py">liftExecutorService</span><span class="o">(</span><span class="n">blockingPool</span><span class="o">)</span>
-  <span class="k">implicit</span> <span class="k">val</span> <span class="nv">cs</span><span class="k">:</span> <span class="kt">ContextShift</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nv">IO</span><span class="o">.</span><span class="py">contextShift</span><span class="o">(</span><span class="n">global</span><span class="o">)</span>
-  <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">blocker</span><span class="o">).</span><span class="py">create</span> <span class="c1">// use BlazeClientBuilder for production use</span>
+  <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">].</span><span class="py">create</span> <span class="c1">// You can use any http4s backend</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
@@ -89,98 +82,57 @@ please create an issue at https://github.com/47degrees/github4s/issues.</li>
 
 <p>Github4s supports different effect types which we will go through next.</p>
 
-<h3 id="using-f_-catseffectsync">Using <code class="highlighter-rouge">F[_]: cats.effect.Sync</code></h3>
+<h3 id="using-f_-catseffectconcurrent">Using <code class="highlighter-rouge">F[_]: cats.effect.Concurrent</code></h3>
 
-<p>Any type with a <code class="highlighter-rouge">cats.effect.Sync</code> instance can be used with this example, such as
-<code class="highlighter-rouge">monix.eval.Task</code>.</p>
+<p>Any type with a <code class="highlighter-rouge">cats.effect.Concurrent</code> instance can be used with this example</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ProgramF</span> <span class="o">{</span>
-  <span class="k">import</span> <span class="nn">cats.effect.Sync</span>
+  <span class="k">import</span> <span class="nn">cats.effect.Concurrent</span>
   <span class="k">import</span> <span class="nn">github4s.Github</span>
   <span class="k">import</span> <span class="nn">github4s.GHResponse</span>
   <span class="k">import</span> <span class="nn">github4s.domain.User</span>
   <span class="k">import</span> <span class="nn">org.http4s.client.Client</span>
 
-  <span class="k">def</span> <span class="nf">u1</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Sync</span><span class="o">](</span><span class="n">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">GHResponse</span><span class="o">[</span><span class="kt">User</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="k">def</span> <span class="nf">u1</span><span class="o">[</span><span class="kt">F</span><span class="o">[</span><span class="k">_</span><span class="o">]</span><span class="kt">:</span> <span class="kt">Concurrent</span><span class="o">](</span><span class="n">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">F</span><span class="o">])</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">GHResponse</span><span class="o">[</span><span class="kt">User</span><span class="o">]]</span> <span class="k">=</span>
     <span class="nc">Github</span><span class="o">[</span><span class="kt">F</span><span class="o">](</span><span class="n">httpClient</span><span class="o">,</span> <span class="n">accessToken</span><span class="o">).</span><span class="py">users</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"juanpedromoreno"</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
 <h3 id="using-catseffectio">Using <code class="highlighter-rouge">cats.effect.IO</code></h3>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ProgramIO</span> <span class="o">{</span>
-  <span class="k">import</span> <span class="nn">java.util.concurrent.Executors</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.effect.IO</span>
+<span class="k">import</span> <span class="nn">cats.effect.unsafe.implicits.global</span>    
+<span class="k">import</span> <span class="nn">github4s.Github</span>
+<span class="k">import</span> <span class="nn">org.http4s.client.</span><span class="o">{</span><span class="nc">Client</span><span class="o">,</span> <span class="nc">JavaNetClientBuilder</span><span class="o">}</span>
 
-  <span class="k">import</span> <span class="nn">cats.effect.</span><span class="o">{</span><span class="nc">Blocker</span><span class="o">,</span> <span class="nc">ContextShift</span><span class="o">,</span> <span class="nc">IO</span><span class="o">}</span>
-  <span class="k">import</span> <span class="nn">github4s.Github</span>
-  <span class="k">import</span> <span class="nn">org.http4s.client.</span><span class="o">{</span><span class="nc">Client</span><span class="o">,</span> <span class="nc">JavaNetClientBuilder</span><span class="o">}</span>
+<span class="k">object</span> <span class="nc">ProgramIO</span> <span class="o">{</span>
 
-  <span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.global</span>
-
-  <span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-    <span class="k">val</span> <span class="nv">blockingPool</span> <span class="k">=</span> <span class="nv">Executors</span><span class="o">.</span><span class="py">newFixedThreadPool</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-    <span class="k">val</span> <span class="nv">blocker</span> <span class="k">=</span> <span class="nv">Blocker</span><span class="o">.</span><span class="py">liftExecutorService</span><span class="o">(</span><span class="n">blockingPool</span><span class="o">)</span>
-    <span class="k">implicit</span> <span class="k">val</span> <span class="nv">cs</span><span class="k">:</span> <span class="kt">ContextShift</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nv">IO</span><span class="o">.</span><span class="py">contextShift</span><span class="o">(</span><span class="n">global</span><span class="o">)</span>
-    <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">blocker</span><span class="o">).</span><span class="py">create</span> <span class="c1">// use BlazeClientBuilder for production use</span>
-  <span class="o">}</span>
+  <span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">].</span><span class="py">create</span> <span class="c1">// You can use any http4s backend</span>
 
   <span class="k">val</span> <span class="nv">u2</span> <span class="k">=</span> <span class="nc">Github</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">httpClient</span><span class="o">,</span> <span class="n">accessToken</span><span class="o">).</span><span class="py">users</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"juanpedromoreno"</span><span class="o">)</span>
   <span class="nv">u2</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h3 id="using-catsid">Using <code class="highlighter-rouge">cats.Id</code></h3>
-
-<p>Support for <code class="highlighter-rouge">cats.Id</code> is provided with <code class="highlighter-rouge">GithubIOSyntax</code> which contains syntax to lift from <code class="highlighter-rouge">IO</code>.</p>
-
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ProgramId</span> <span class="o">{</span>
-  <span class="k">import</span> <span class="nn">java.util.concurrent.Executors</span>
-
-  <span class="k">import</span> <span class="nn">cats.effect.</span><span class="o">{</span><span class="nc">Blocker</span><span class="o">,</span> <span class="nc">ContextShift</span><span class="o">,</span> <span class="nc">IO</span><span class="o">}</span>
-  <span class="k">import</span> <span class="nn">github4s.Github</span>
-  <span class="k">import</span> <span class="nn">github4s.GithubIOSyntax._</span>
-  <span class="k">import</span> <span class="nn">org.http4s.client.</span><span class="o">{</span><span class="nc">Client</span><span class="o">,</span> <span class="nc">JavaNetClientBuilder</span><span class="o">}</span>
-
-  <span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.global</span>
-
-  <span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-    <span class="k">val</span> <span class="nv">blockingPool</span> <span class="k">=</span> <span class="nv">Executors</span><span class="o">.</span><span class="py">newFixedThreadPool</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-    <span class="k">val</span> <span class="nv">blocker</span> <span class="k">=</span> <span class="nv">Blocker</span><span class="o">.</span><span class="py">liftExecutorService</span><span class="o">(</span><span class="n">blockingPool</span><span class="o">)</span>
-    <span class="k">implicit</span> <span class="k">val</span> <span class="nv">cs</span><span class="k">:</span> <span class="kt">ContextShift</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nv">IO</span><span class="o">.</span><span class="py">contextShift</span><span class="o">(</span><span class="n">global</span><span class="o">)</span>
-    <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">blocker</span><span class="o">).</span><span class="py">create</span> <span class="c1">// use BlazeClientBuilder for production use</span>
-  <span class="o">}</span>
-
-  <span class="k">val</span> <span class="nv">u4</span> <span class="k">=</span> <span class="nc">Github</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">httpClient</span><span class="o">,</span> <span class="n">accessToken</span><span class="o">).</span><span class="py">users</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"juanpedromoreno"</span><span class="o">).</span><span class="py">toId</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
 <h3 id="using-future">Using <code class="highlighter-rouge">Future</code></h3>
 
-<p>Support for <code class="highlighter-rouge">Future</code> is provided with <code class="highlighter-rouge">GithubIOSyntax</code> which contains syntax to lift from <code class="highlighter-rouge">IO</code>.</p>
-
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ProgramFuture</span> <span class="o">{</span>
-  <span class="k">import</span> <span class="nn">java.util.concurrent.Executors</span>
-
-  <span class="k">import</span> <span class="nn">cats.effect.</span><span class="o">{</span><span class="nc">Blocker</span><span class="o">,</span> <span class="nc">ContextShift</span><span class="o">,</span> <span class="nc">IO</span><span class="o">}</span>
+  <span class="k">import</span> <span class="nn">cats.effect.IO</span>
+  <span class="k">import</span> <span class="nn">cats.effect.unsafe.implicits.global</span>
   <span class="k">import</span> <span class="nn">github4s.Github</span>
-  <span class="k">import</span> <span class="nn">github4s.GithubIOSyntax._</span>
   <span class="k">import</span> <span class="nn">org.http4s.client.</span><span class="o">{</span><span class="nc">Client</span><span class="o">,</span> <span class="nc">JavaNetClientBuilder</span><span class="o">}</span>
 
   <span class="k">import</span> <span class="nn">scala.concurrent.Await</span>
-  <span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
   <span class="k">import</span> <span class="nn">scala.concurrent.duration._</span>
 
-  <span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-    <span class="k">val</span> <span class="nv">blockingPool</span> <span class="k">=</span> <span class="nv">Executors</span><span class="o">.</span><span class="py">newFixedThreadPool</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-    <span class="k">val</span> <span class="nv">blocker</span> <span class="k">=</span> <span class="nv">Blocker</span><span class="o">.</span><span class="py">liftExecutorService</span><span class="o">(</span><span class="n">blockingPool</span><span class="o">)</span>
-    <span class="k">implicit</span> <span class="k">val</span> <span class="nv">cs</span><span class="k">:</span> <span class="kt">ContextShift</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nv">IO</span><span class="o">.</span><span class="py">contextShift</span><span class="o">(</span><span class="n">global</span><span class="o">)</span>
-    <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">blocker</span><span class="o">).</span><span class="py">create</span> <span class="c1">// use BlazeClientBuilder for production use</span>
-  <span class="o">}</span>
+  <span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">].</span><span class="py">create</span> <span class="c1">// You can use any http4s backend</span>
 
-  <span class="k">val</span> <span class="nv">u5</span> <span class="k">=</span> <span class="nc">Github</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">httpClient</span><span class="o">,</span> <span class="n">accessToken</span><span class="o">).</span><span class="py">users</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"juanpedromoreno"</span><span class="o">).</span><span class="py">toFuture</span>
+  <span class="k">val</span> <span class="nv">u5</span> <span class="k">=</span> <span class="nc">Github</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">httpClient</span><span class="o">,</span> <span class="n">accessToken</span><span class="o">).</span><span class="py">users</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"juanpedromoreno"</span><span class="o">).</span><span class="py">unsafeToFuture</span><span class="o">()</span>
   <span class="nv">Await</span><span class="o">.</span><span class="py">result</span><span class="o">(</span><span class="n">u5</span><span class="o">,</span> <span class="mf">2.</span><span class="n">seconds</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div></div>
+
+<p>When using capability traits (aka “tagless final”) style, you can convert any <code class="highlighter-rouge">Async[F]</code> to a Future using <a href="https://typelevel.org/cats-effect/docs/std/dispatcher"><code class="highlighter-rouge">Dispatcher</code></a></p>
 
 <h2 id="using-github4s-with-github-enterprise">Using github4s with GitHub Enterprise</h2>
 
@@ -193,11 +145,11 @@ scope:</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">github4s.</span><span class="o">{</span><span class="nc">Github</span><span class="o">,</span> <span class="nc">GithubConfig</span><span class="o">}</span>
 
-<span class="k">implicit</span> <span class="k">val</span> <span class="nv">config</span> <span class="k">=</span> <span class="nc">GithubConfig</span><span class="o">(</span>
-  <span class="n">baseUrl</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span>       <span class="c1">// default: "https://api.github.com/"</span>
-  <span class="n">authorizeUrl</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span>  <span class="c1">// default: "https://github.com/login/oauth/authorize?client_id=%s&amp;redirect_uri=%s&amp;scope=%s&amp;state=%s"</span>
+<span class="k">implicit</span> <span class="k">val</span> <span class="nv">config</span><span class="k">:</span> <span class="kt">GithubConfig</span> <span class="o">=</span> <span class="nc">GithubConfig</span><span class="o">(</span>
+  <span class="n">baseUrl</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span>        <span class="c1">// default: "https://api.github.com/"</span>
+  <span class="n">authorizeUrl</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span>   <span class="c1">// default: "https://github.com/login/oauth/authorize?client_id=%s&amp;redirect_uri=%s&amp;scope=%s&amp;state=%s"</span>
   <span class="n">accessTokenUrl</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="c1">// default: "https://github.com/login/oauth/access_token"</span>
-  <span class="n">headers</span> <span class="k">=</span> <span class="nv">Map</span><span class="o">.</span><span class="py">empty</span> <span class="c1">// default: Map("User-Agent" -&gt; "github4s")</span>
+  <span class="n">headers</span> <span class="k">=</span> <span class="nv">Map</span><span class="o">.</span><span class="py">empty</span>  <span class="c1">// default: Map("User-Agent" -&gt; "github4s")</span>
 <span class="o">)</span>
 
 <span class="k">val</span> <span class="nv">github</span> <span class="k">=</span> <span class="nc">Github</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">httpClient</span><span class="o">,</span> <span class="nc">None</span><span class="o">)</span>
@@ -209,22 +161,15 @@ scope:</p>
 <p>Headers are an optional field for any Github API request:</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">object</span> <span class="nc">ProgramEvalWithHeaders</span> <span class="o">{</span>
-  <span class="k">import</span> <span class="nn">java.util.concurrent.Executors</span>
 
-  <span class="k">import</span> <span class="nn">cats.effect.Blocker</span>
+  <span class="k">import</span> <span class="nn">cats.effect.IO</span>
   <span class="k">import</span> <span class="nn">github4s.Github</span>
-  <span class="k">import</span> <span class="nn">monix.execution.Scheduler.Implicits.global</span>
-  <span class="k">import</span> <span class="nn">monix.eval.Task</span>
   <span class="k">import</span> <span class="nn">org.http4s.client.</span><span class="o">{</span><span class="nc">Client</span><span class="o">,</span> <span class="nc">JavaNetClientBuilder</span><span class="o">}</span>
 
-  <span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">Task</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-    <span class="k">val</span> <span class="nv">blockingPool</span> <span class="k">=</span> <span class="nv">Executors</span><span class="o">.</span><span class="py">newFixedThreadPool</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-    <span class="k">val</span> <span class="nv">blocker</span> <span class="k">=</span> <span class="nv">Blocker</span><span class="o">.</span><span class="py">liftExecutorService</span><span class="o">(</span><span class="n">blockingPool</span><span class="o">)</span>
-    <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">blocker</span><span class="o">).</span><span class="py">create</span> <span class="c1">// use BlazeClientBuilder for production use</span>
-  <span class="o">}</span>
+  <span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">].</span><span class="py">create</span> <span class="c1">// You can use any http4s backend</span>
 
   <span class="k">val</span> <span class="nv">userHeaders</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"user-agent"</span> <span class="o">-&gt;</span> <span class="s">"github4s"</span><span class="o">)</span>
-  <span class="k">val</span> <span class="nv">u6</span> <span class="k">=</span> <span class="nc">Github</span><span class="o">[</span><span class="kt">Task</span><span class="o">](</span><span class="n">accessToken</span><span class="o">).</span><span class="py">users</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"rafaparadela"</span><span class="o">,</span> <span class="n">userHeaders</span><span class="o">)</span>
+  <span class="k">val</span> <span class="nv">u6</span> <span class="k">=</span> <span class="nc">Github</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">accessToken</span><span class="o">).</span><span class="py">users</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"rafaparadela"</span><span class="o">,</span> <span class="n">userHeaders</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div></div>
 

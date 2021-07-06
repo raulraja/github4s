@@ -162,7 +162,7 @@ grouped by API which means we’ll be working on <a href="https://github.com/47d
     <span class="k">val</span> <span class="nv">response</span><span class="k">:</span> <span class="kt">IO</span><span class="o">[</span><span class="kt">GHResponse</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Status</span><span class="o">]]]</span> <span class="k">=</span>
       <span class="nc">IO</span><span class="o">(</span><span class="nc">GHResult</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span><span class="n">status</span><span class="o">).</span><span class="py">asRight</span><span class="o">,</span> <span class="n">okStatusCode</span><span class="o">,</span> <span class="nv">Map</span><span class="o">.</span><span class="py">empty</span><span class="o">))</span>
 
-    <span class="k">implicit</span> <span class="k">val</span> <span class="nv">httpClientMock</span> <span class="k">=</span> <span class="n">httpClientMockGet</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Status</span><span class="o">]](</span>
+    <span class="k">implicit</span> <span class="k">val</span> <span class="nv">httpClientMock</span><span class="k">:</span> <span class="kt">HttpClient</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="n">httpClientMockGet</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Status</span><span class="o">]](</span>
       <span class="n">url</span> <span class="k">=</span> <span class="n">s</span><span class="s">"repos/$validRepoOwner/$validRepoName/commits/$validRefSingle/statuses"</span><span class="o">,</span>
       <span class="n">response</span> <span class="k">=</span> <span class="n">response</span>
     <span class="o">)</span>
@@ -193,11 +193,10 @@ To list the statuses for a specific ref:
 
 {triple backtick}scala mdoc:silent
 val listStatuses = gh.repos.listStatuses("47degrees", "github4s", "heads/master")
-val response = listStatuses.unsafeRunSync()
-response.result match {
-  case Left(e) =&gt; println(s"Something went wrong: ${e.getMessage}")
-  case Right(r) =&gt; println(r)
-}
+listStatuses.flatMap(_.result match {
+  case Left(e)  =&gt; IO.println(s"Something went wrong: ${e.getMessage}")
+  case Right(r) =&gt; IO.println(r)
+})
 {triple backtick}
 
 The `result` on the right is the corresponding [List[Status]][repository-scala].

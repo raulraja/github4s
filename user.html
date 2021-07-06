@@ -14,20 +14,13 @@ with Github4s, you can interacts with:</p>
   </li>
 </ul>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">java.util.concurrent._</span>
-
-<span class="k">import</span> <span class="nn">cats.effect.</span><span class="o">{</span><span class="nc">Blocker</span><span class="o">,</span> <span class="nc">ContextShift</span><span class="o">,</span> <span class="nc">IO</span><span class="o">}</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">import</span> <span class="nn">cats.effect.IO</span>
 <span class="k">import</span> <span class="nn">github4s.Github</span>
 <span class="k">import</span> <span class="nn">org.http4s.client.</span><span class="o">{</span><span class="nc">Client</span><span class="o">,</span> <span class="nc">JavaNetClientBuilder</span><span class="o">}</span>
 
-<span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.global</span>
 
-<span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-  <span class="k">val</span> <span class="nv">blockingPool</span> <span class="k">=</span> <span class="nv">Executors</span><span class="o">.</span><span class="py">newFixedThreadPool</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-  <span class="k">val</span> <span class="nv">blocker</span> <span class="k">=</span> <span class="nv">Blocker</span><span class="o">.</span><span class="py">liftExecutorService</span><span class="o">(</span><span class="n">blockingPool</span><span class="o">)</span>
-  <span class="k">implicit</span> <span class="k">val</span> <span class="nv">cs</span><span class="k">:</span> <span class="kt">ContextShift</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nv">IO</span><span class="o">.</span><span class="py">contextShift</span><span class="o">(</span><span class="n">global</span><span class="o">)</span>
-  <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">blocker</span><span class="o">).</span><span class="py">create</span> <span class="c1">// use BlazeClientBuilder for production use</span>
-<span class="o">}</span>
+<span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">].</span><span class="py">create</span> <span class="c1">// You can use any http4s backend</span>
 
 <span class="k">val</span> <span class="nv">accessToken</span> <span class="k">=</span> <span class="nv">sys</span><span class="o">.</span><span class="py">env</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"GITHUB_TOKEN"</span><span class="o">)</span>
 <span class="k">val</span> <span class="nv">gh</span> <span class="k">=</span> <span class="nc">Github</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">httpClient</span><span class="o">,</span> <span class="n">accessToken</span><span class="o">)</span>
@@ -46,11 +39,10 @@ with Github4s, you can interacts with:</p>
 </ul>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">getUser</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">users</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"rafaparadela"</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">getUser</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
-<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
-<span class="o">}</span>
+<span class="nv">getUser</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">})</span>
 </code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/User.scala">User</a>.</p>
@@ -64,11 +56,10 @@ with Github4s, you can interacts with:</p>
 <p>You can get an authenticated user using <code class="highlighter-rouge">getAuth</code>:</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">getAuth</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">users</span><span class="o">.</span><span class="py">getAuth</span><span class="o">()</span>
-<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">getAuth</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
-<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
-<span class="o">}</span>
+<span class="nv">getAuth</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">})</span>
 </code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/User.scala">User</a>.</p>
@@ -85,11 +76,10 @@ with Github4s, you can interacts with:</p>
 </ul>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">getUsers</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">users</span><span class="o">.</span><span class="py">getUsers</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">getUsers</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
-<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
-<span class="o">}</span>
+<span class="nv">getUsers</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">})</span>
 </code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/User.scala">List[User]</a>.</p>
@@ -110,11 +100,10 @@ with Github4s, you can interacts with:</p>
 </ul>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">getFollowing</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">users</span><span class="o">.</span><span class="py">getFollowing</span><span class="o">(</span><span class="s">"rafaparadela"</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">getFollowing</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
-<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
-<span class="o">}</span>
+<span class="nv">getFollowing</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">})</span>
 </code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/User.scala">List[User]</a>.</p>

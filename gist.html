@@ -11,20 +11,11 @@ with Github4s, you can:</p>
 
 <p>The following examples assume the following code:</p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">java.util.concurrent._</span>
-
-<span class="k">import</span> <span class="nn">cats.effect.</span><span class="o">{</span><span class="nc">Blocker</span><span class="o">,</span> <span class="nc">ContextShift</span><span class="o">,</span> <span class="nc">IO</span><span class="o">}</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.effect.IO</span>
 <span class="k">import</span> <span class="nn">github4s.Github</span>
 <span class="k">import</span> <span class="nn">org.http4s.client.</span><span class="o">{</span><span class="nc">Client</span><span class="o">,</span> <span class="nc">JavaNetClientBuilder</span><span class="o">}</span>
 
-<span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.global</span>
-
-<span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-  <span class="k">val</span> <span class="nv">blockingPool</span> <span class="k">=</span> <span class="nv">Executors</span><span class="o">.</span><span class="py">newFixedThreadPool</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-  <span class="k">val</span> <span class="nv">blocker</span> <span class="k">=</span> <span class="nv">Blocker</span><span class="o">.</span><span class="py">liftExecutorService</span><span class="o">(</span><span class="n">blockingPool</span><span class="o">)</span>
-  <span class="k">implicit</span> <span class="k">val</span> <span class="nv">cs</span><span class="k">:</span> <span class="kt">ContextShift</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nv">IO</span><span class="o">.</span><span class="py">contextShift</span><span class="o">(</span><span class="n">global</span><span class="o">)</span>
-  <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">blocker</span><span class="o">).</span><span class="py">create</span> <span class="c1">// use BlazeClientBuilder for production use</span>
-<span class="o">}</span>
+<span class="k">val</span> <span class="nv">httpClient</span><span class="k">:</span> <span class="kt">Client</span><span class="o">[</span><span class="kt">IO</span><span class="o">]</span> <span class="k">=</span> <span class="nc">JavaNetClientBuilder</span><span class="o">[</span><span class="kt">IO</span><span class="o">].</span><span class="py">create</span> <span class="c1">// You can use any http4s backend</span>
 
 <span class="k">val</span> <span class="nv">accessToken</span> <span class="k">=</span> <span class="nv">sys</span><span class="o">.</span><span class="py">env</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"GITHUB_TOKEN"</span><span class="o">)</span>
 <span class="k">val</span> <span class="nv">gh</span> <span class="k">=</span> <span class="nc">Github</span><span class="o">[</span><span class="kt">IO</span><span class="o">](</span><span class="n">httpClient</span><span class="o">,</span> <span class="n">accessToken</span><span class="o">)</span>
@@ -49,11 +40,10 @@ with Github4s, you can:</p>
   <span class="s">"gh4s.scala"</span>  <span class="o">-&gt;</span> <span class="nc">GistFile</span><span class="o">(</span><span class="s">"val gh = Github(accessToken)"</span><span class="o">)</span>
 <span class="o">)</span>
 <span class="k">val</span> <span class="nv">newGist</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">gists</span><span class="o">.</span><span class="py">newGist</span><span class="o">(</span><span class="s">"Github4s entry point"</span><span class="o">,</span> <span class="n">public</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">gistfiles</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">newGist</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
-<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
-<span class="o">}</span>
+<span class="nv">newGist</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">})</span>
 </code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Gist.scala">Gist</a>.</p>
@@ -72,21 +62,19 @@ with Github4s, you can:</p>
 <p>To get a single gist:</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">singleGist</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">gists</span><span class="o">.</span><span class="py">getGist</span><span class="o">(</span><span class="s">"aa5a315d61ae9438b18d"</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">singleGist</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
-<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
-<span class="o">}</span>
+<span class="nv">singleGist</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">})</span>
 </code></pre></div></div>
 
 <p>Similarly, to get a specific revision of a gist:</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">sepcificRevisionGist</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">gists</span><span class="o">.</span><span class="py">getGist</span><span class="o">(</span><span class="s">"aa5a315d61ae9438b18d"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"4e481528046a016fc11d6e7d8d623b55ea11e372"</span><span class="o">))</span>
-<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">sepcificRevisionGist</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
-<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
-<span class="o">}</span>
+<span class="nv">sepcificRevisionGist</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">})</span>
 </code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">result</code> on the right is the requested <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Gist.scala">Gist</a>.</p>
@@ -114,11 +102,10 @@ with Github4s, you can:</p>
 <span class="o">)</span>
 
 <span class="k">val</span> <span class="nv">updatedGist</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">gists</span><span class="o">.</span><span class="py">editGist</span><span class="o">(</span><span class="s">"aa5a315d61ae9438b18d"</span><span class="o">,</span> <span class="s">"Updated github4s entry point"</span><span class="o">,</span> <span class="n">editfiles</span><span class="o">)</span>
-<span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">updatedGist</span><span class="o">.</span><span class="py">unsafeRunSync</span><span class="o">()</span>
-<span class="nv">response</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
-  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
-  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
-<span class="o">}</span>
+<span class="nv">updatedGist</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">})</span>
 </code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">result</code> on the right is the updated <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Gist.scala">Gist</a>.</p>
