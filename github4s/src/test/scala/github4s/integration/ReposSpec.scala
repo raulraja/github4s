@@ -471,6 +471,23 @@ trait ReposSpec extends BaseIntegrationSpec {
     response.statusCode shouldBe okStatusCode
   }
 
+  it should "successfully return results when a valid repo is provided using <owner>/<name> syntax" taggedAs Integration in {
+    val response = clientResource
+      .use { client =>
+        Github[IO](client, accessToken).repos
+          .searchRepos(s"$validRepoOwner/$validRepoName", Nil)
+      }
+      .unsafeRunSync()
+
+    testIsRight[SearchReposResult](
+      response,
+      { r =>
+        r.total_count > 0 shouldBe true
+        r.items.nonEmpty shouldBe true
+      }
+    )
+  }
+
   it should "return an empty result for a non existent query string" taggedAs Integration in {
     val response = clientResource
       .use { client =>

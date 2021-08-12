@@ -33,7 +33,7 @@ trait TestData {
   val invalidUsername = "GHInvalidUserName"
   val invalidPassword = "invalidPassword"
 
-  val githubApiUrl                           = "http://api.github.com"
+  val githubApiUrl                           = "https://api.github.com"
   val user                                   = User(1, validUsername, githubApiUrl, githubApiUrl)
   val userRepoPermission: UserRepoPermission = UserRepoPermission("admin", user)
 
@@ -89,7 +89,7 @@ trait TestData {
 
   val validFileContent = "def hack(target: String): Option[Int] = None"
 
-  val validSearchQuery       = "Scala 2.12"
+  val validSearchQuery       = "\"/\" not accepted in SearchRepos"
   val nonExistentSearchQuery = "nonExistentSearchQueryString"
   val validSearchParams = List(
     OwnerParamInRepository(s"$validRepoOwner/$validRepoName")
