@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 47 Degrees Open Source <https://www.47deg.com>
+ * Copyright 2016-2021 47 Degrees Open Source <https://www.47deg.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@ package github4s.utils
 
 import java.util.UUID
 
-import com.github.marklister.base64.Base64._
-import github4s.domain.{Stargazer, StarredRepository, Subscription, _}
+import github4s.internal.Base64._
+import github4s.domain._
 
 trait TestData {
 
-  val sampleToken: Option[String]          = Some("token")
-  val headerUserAgent: Map[String, String] = Map("user-agent" -> "github4s")
+  val sampleToken: Option[String] = Some("token")
+  val headerUserAgent             = Map("user-agent" -> "github4s")
   val headerAccept: Map[String, String] = Map(
     "Accept" -> "application/vnd.github.inertia-preview+json"
   )
@@ -33,7 +33,7 @@ trait TestData {
   val invalidUsername = "GHInvalidUserName"
   val invalidPassword = "invalidPassword"
 
-  val githubApiUrl                           = "http://api.github.com"
+  val githubApiUrl                           = "https://api.github.com"
   val user                                   = User(1, validUsername, githubApiUrl, githubApiUrl)
   val userRepoPermission: UserRepoPermission = UserRepoPermission("admin", user)
 
@@ -89,7 +89,7 @@ trait TestData {
 
   val validFileContent = "def hack(target: String): Option[Int] = None"
 
-  val validSearchQuery       = "Scala 2.12"
+  val validSearchQuery       = "\"/\" not accepted in SearchRepos"
   val nonExistentSearchQuery = "nonExistentSearchQueryString"
   val validSearchParams = List(
     OwnerParamInRepository(s"$validRepoOwner/$validRepoName")
@@ -114,7 +114,7 @@ trait TestData {
 
   val encoding = Some("utf-8")
 
-  val validRefSingle   = "heads/master"
+  val validRefSingle   = "heads/main"
   val validRefMultiple = "heads/feature"
   val invalidRef       = "heads/feature-branch-that-no-longer-exists"
 
@@ -395,6 +395,12 @@ trait TestData {
     Some(validNote)
   )
 
+  val searchReposResult = SearchReposResult(
+    total_count = 1,
+    incomplete_results = false,
+    items = List(repo)
+  )
+
   val commit = Commit(
     validCommitSha,
     validNote,
@@ -418,8 +424,7 @@ trait TestData {
   val validTokenType = "bearer"
   val validAuthState = UUID.randomUUID().toString
 
-  val authorization = Authorization(1, validRedirectUri, "token")
-  val authorize     = Authorize(validRedirectUri, validAuthState)
+  val authorize = Authorize(validRedirectUri, validAuthState)
 
   val oAuthToken   = OAuthToken("token", validTokenType, "public_repo")
   val validGistUrl = "https://api.github.com/gists/aa5a315d61ae9438b18d"

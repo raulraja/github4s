@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 47 Degrees Open Source <https://www.47deg.com>
+ * Copyright 2016-2021 47 Degrees Open Source <https://www.47deg.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,11 @@
 package github4s
 
 import cats.data.NonEmptyList
-import cats.instances.either._
-import cats.instances.list._
-import cats.syntax.list._
-import cats.syntax.traverse._
+import cats.syntax.all._
 import github4s.domain._
 import io.circe.Decoder.Result
 import io.circe._
-import io.circe.generic.auto._
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.generic.semiauto.deriveDecoder
 
 /**
  * Implicit circe decoders of domains objects
@@ -36,6 +32,8 @@ object Decoders {
       avatar_url: Option[String],
       html_url: Option[String]
   )
+
+  implicit val decodeAuthor: Decoder[Author] = deriveDecoder[Author]
 
   implicit val decodeCommit: Decoder[Commit] = Decoder.instance { c =>
     for {
@@ -79,8 +77,10 @@ object Decoders {
     )
   }
 
-  def readRepoUrls(c: HCursor): Either[DecodingFailure, List[Option[String]]] =
-    RepoUrlKeys.allFields.traverse(name => c.downField(name).as[Option[String]])
+  def readRepoUrls(c: HCursor): Either[DecodingFailure, Map[String, String]] =
+    RepoUrlKeys.allFields
+      .traverse(name => c.downField(name).as[Option[String]].map(_.map(value => name -> value)))
+      .map(_.flatten.toMap)
 
   implicit val decodeStatusRepository: Decoder[StatusRepository] = {
     Decoder.instance { c =>
@@ -101,14 +101,12 @@ object Decoders {
         `private` = priv,
         description = description,
         fork = fork,
-        urls = (RepoUrlKeys.allFields zip repoUrls.flatten map { case (urlName, value) =>
-          urlName -> value
-        }).toMap
+        urls = repoUrls
       )
     }
   }
 
-  implicit val decodeRepository: Decoder[Repository] = {
+  implicit val decodeRepositoryBase: Decoder[RepositoryBase] = {
 
     Decoder.instance { c =>
       for {
@@ -145,8 +143,9 @@ object Decoders {
         ssh_url           <- c.downField("ssh_url").as[String]
         clone_url         <- c.downField("clone_url").as[String]
         svn_url           <- c.downField("svn_url").as[String]
+        permissions       <- c.downField("permissions").as[Option[RepoPermissions]]
         repoUrls          <- readRepoUrls(c)
-      } yield Repository(
+      } yield RepositoryBase(
         id = id,
         name = name,
         full_name = full_name,
@@ -161,6 +160,7 @@ object Decoders {
         homepage = homepage,
         language = language,
         organization = organization,
+        permissions = permissions,
         status = RepoStatus(
           size = size,
           stargazers_count = stargazers_count,
@@ -183,19 +183,26 @@ object Decoders {
           ssh_url = ssh_url,
           clone_url = clone_url,
           svn_url = svn_url,
-          otherUrls = (RepoUrlKeys.allFields zip repoUrls.flatten).toMap
+          otherUrls = repoUrls
         )
       )
     }
   }
 
+  implicit val decodeRepository: Decoder[Repository] = for {
+    base   <- decodeRepositoryBase
+    parent <- Decoder[Option[RepositoryBase]].at("parent")
+    source <- Decoder[Option[RepositoryBase]].at("source")
+  } yield Repository.fromBaseRepos(base, parent, source)
+
   implicit val decodePRStatus: Decoder[PullRequestReviewState] =
-    Decoder.decodeString.map {
-      case PRRStateApproved.value         => PRRStateApproved
-      case PRRStateChangesRequested.value => PRRStateChangesRequested
-      case PRRStateCommented.value        => PRRStateCommented
-      case PRRStatePending.value          => PRRStatePending
-      case PRRStateDismissed.value        => PRRStateDismissed
+    Decoder.decodeString.emap {
+      case PRRStateApproved.value         => PRRStateApproved.asRight
+      case PRRStateChangesRequested.value => PRRStateChangesRequested.asRight
+      case PRRStateCommented.value        => PRRStateCommented.asRight
+      case PRRStatePending.value          => PRRStatePending.asRight
+      case PRRStateDismissed.value        => PRRStateDismissed.asRight
+      case other                          => s"Unknown pull request review state: $other".asLeft
     }
 
   implicit val decodeGistFile: Decoder[GistFile] = Decoder.instance { c =>
@@ -234,6 +241,31 @@ object Decoders {
         )
       )
 
+  implicit val decoderCreatePullRequestData: Decoder[CreatePullRequestData] =
+    deriveDecoder[CreatePullRequestData]
+  implicit val decoderCreatePullRequestIssue: Decoder[CreatePullRequestIssue] =
+    deriveDecoder[CreatePullRequestIssue]
+  implicit val decoderNewBlobRequest: Decoder[NewBlobRequest]   = deriveDecoder[NewBlobRequest]
+  implicit val decoderNewGistRequest: Decoder[NewGistRequest]   = deriveDecoder[NewGistRequest]
+  implicit val decoderNewIssueRequest: Decoder[NewIssueRequest] = deriveDecoder[NewIssueRequest]
+  implicit val decoderNewReleaseRequest: Decoder[NewReleaseRequest] =
+    deriveDecoder[NewReleaseRequest]
+  implicit val decoderSubscriptionRequest: Decoder[SubscriptionRequest] =
+    deriveDecoder[SubscriptionRequest]
+  implicit val decoderTreeData: Decoder[TreeData] = {
+    val sha  = deriveDecoder[TreeDataSha]
+    val blob = deriveDecoder[TreeDataBlob]
+    sha.widen[TreeData] or blob.widen[TreeData]
+  }
+  implicit val decoderUpdateReferenceRequest: Decoder[UpdateReferenceRequest] =
+    deriveDecoder[UpdateReferenceRequest]
+  implicit val decoderWriteFileRequest: Decoder[WriteFileRequest] = deriveDecoder[WriteFileRequest]
+  implicit val decoderReviewersRequest: Decoder[ReviewersRequest] = deriveDecoder[ReviewersRequest]
+  implicit val decoderNewStatusRequest: Decoder[NewStatusRequest] = deriveDecoder[NewStatusRequest]
+  implicit val decoderNewTagRequest: Decoder[NewTagRequest]       = deriveDecoder[NewTagRequest]
+  implicit val decoderNewTreeRequest: Decoder[NewTreeRequest]     = deriveDecoder[NewTreeRequest]
+  implicit val decoderNewCommitRequest: Decoder[NewCommitRequest] = deriveDecoder[NewCommitRequest]
+
   implicit def decodeNonEmptyList[T](implicit D: Decoder[T]): Decoder[NonEmptyList[T]] = {
 
     def decodeCursors(cursors: List[HCursor]): Result[NonEmptyList[T]] =
@@ -249,31 +281,42 @@ object Decoders {
     }
   }
 
+  implicit val decoderCommitter: Decoder[Committer] = deriveDecoder[Committer]
+  implicit val decoderWriteResponseCommit: Decoder[WriteResponseCommit] =
+    deriveDecoder[WriteResponseCommit]
   implicit val decoderWriteFileResponse: Decoder[WriteFileResponse] =
     deriveDecoder[WriteFileResponse]
   implicit val decoderPullRequestFile: Decoder[PullRequestFile] = deriveDecoder[PullRequestFile]
   implicit val decoderPullRequestReview: Decoder[PullRequestReview] =
     deriveDecoder[PullRequestReview]
-  implicit val decoderPullRequest: Decoder[PullRequest] = deriveDecoder[PullRequest]
-  implicit val decoderRef: Decoder[Ref]                 = deriveDecoder[Ref]
-  implicit val decoderRefCommit: Decoder[RefCommit]     = deriveDecoder[RefCommit]
-  implicit val decoderRefInfo: Decoder[RefInfo]         = deriveDecoder[RefInfo]
-  implicit val decoderTreeResult: Decoder[TreeResult]   = deriveDecoder[TreeResult]
-  implicit val decoderTag: Decoder[Tag]                 = deriveDecoder[Tag]
-  implicit val decoderIssue: Decoder[Issue]             = deriveDecoder[Issue]
+  implicit val decoderUser: Decoder[User] = deriveDecoder[User]
+
+  implicit val decoderRepoPermissions: Decoder[RepoPermissions] = deriveDecoder[RepoPermissions]
+  implicit val decoderPullRequestBase: Decoder[PullRequestBase] = deriveDecoder[PullRequestBase]
+
+  implicit val decoderPullRequest: Decoder[PullRequest]           = deriveDecoder[PullRequest]
+  implicit val decoderRefObject: Decoder[RefObject]               = deriveDecoder[RefObject]
+  implicit val decoderRef: Decoder[Ref]                           = deriveDecoder[Ref]
+  implicit val decoderRefAuthor: Decoder[RefAuthor]               = deriveDecoder[RefAuthor]
+  implicit val decoderRefCommit: Decoder[RefCommit]               = deriveDecoder[RefCommit]
+  implicit val decoderRefInfo: Decoder[RefInfo]                   = deriveDecoder[RefInfo]
+  implicit val decoderTreeDataResult: Decoder[TreeDataResult]     = deriveDecoder[TreeDataResult]
+  implicit val decoderTreeResult: Decoder[TreeResult]             = deriveDecoder[TreeResult]
+  implicit val decoderTag: Decoder[Tag]                           = deriveDecoder[Tag]
+  implicit val decoderLabel: Decoder[Label]                       = deriveDecoder[Label]
+  implicit val decoderIssuePullRequest: Decoder[IssuePullRequest] = deriveDecoder[IssuePullRequest]
+  implicit val decoderIssue: Decoder[Issue]                       = deriveDecoder[Issue]
   implicit val decoderSearchIssuesResult: Decoder[SearchIssuesResult] =
     deriveDecoder[SearchIssuesResult]
-  implicit val decoderComment: Decoder[Comment]               = deriveDecoder[Comment]
-  implicit val decoderUser: Decoder[User]                     = deriveDecoder[User]
-  implicit val decoderStatus: Decoder[Status]                 = deriveDecoder[Status]
-  implicit val decoderCombinedStatus: Decoder[CombinedStatus] = deriveDecoder[CombinedStatus]
-  implicit val decoderLabel: Decoder[Label]                   = deriveDecoder[Label]
-  implicit val decoderContent: Decoder[Content]               = deriveDecoder[Content]
-  implicit val decoderBlobContent: Decoder[BlobContent]       = deriveDecoder[BlobContent]
-  implicit val decoderSubscription: Decoder[Subscription]     = deriveDecoder[Subscription]
-  implicit val decoderAuthorization: Decoder[Authorization]   = deriveDecoder[Authorization]
-  implicit val decoderOAuthToken: Decoder[OAuthToken]         = deriveDecoder[OAuthToken]
-  implicit val decoderRelease: Decoder[Release]               = deriveDecoder[Release]
+  implicit val decoderSearchReposResult: Decoder[SearchReposResult] = deriveDecoder
+  implicit val decoderComment: Decoder[Comment]                     = deriveDecoder[Comment]
+  implicit val decoderStatus: Decoder[Status]                       = deriveDecoder[Status]
+  implicit val decoderCombinedStatus: Decoder[CombinedStatus]       = deriveDecoder[CombinedStatus]
+  implicit val decoderContent: Decoder[Content]                     = deriveDecoder[Content]
+  implicit val decoderBlobContent: Decoder[BlobContent]             = deriveDecoder[BlobContent]
+  implicit val decoderSubscription: Decoder[Subscription]           = deriveDecoder[Subscription]
+  implicit val decoderOAuthToken: Decoder[OAuthToken]               = deriveDecoder[OAuthToken]
+  implicit val decoderRelease: Decoder[Release]                     = deriveDecoder[Release]
   implicit val decoderUserRepoPermission: Decoder[UserRepoPermission] =
     deriveDecoder[UserRepoPermission]
 
@@ -290,6 +333,7 @@ object Decoders {
       )
 
   implicit val decodeTeam: Decoder[Team]           = deriveDecoder[Team]
+  implicit val decodeCreator: Decoder[Creator]     = deriveDecoder[Creator]
   implicit val decodeMilestone: Decoder[Milestone] = deriveDecoder[Milestone]
   implicit val decodeProject: Decoder[Project]     = deriveDecoder[Project]
   implicit val decodeColumn: Decoder[Column]       = deriveDecoder[Column]
@@ -297,10 +341,35 @@ object Decoders {
 
   implicit val decodeReviewers: Decoder[ReviewersResponse] =
     deriveDecoder[ReviewersResponse]
+  implicit val decoderCommentData: Decoder[CommentData] = deriveDecoder[CommentData]
+  implicit val decoderPullRequestReviewEvent: Decoder[PullRequestReviewEvent] =
+    Decoder[String].emap {
+      case s if s == PRREventApprove.value        => Right(PRREventApprove)
+      case s if s == PRREventRequestChanges.value => Right(PRREventRequestChanges)
+      case s if s == PRREventComment.value        => Right(PRREventComment)
+      case s if s == PRREventPending.value        => Right(PRREventPending)
+      case other                                  => Left(s"Bad event: $other")
+    }
+  implicit val decoderCreateReviewComment: Decoder[CreateReviewComment] =
+    deriveDecoder[CreateReviewComment]
+  implicit val decoderCreatePRReviewRequest: Decoder[CreatePRReviewRequest] =
+    deriveDecoder[CreatePRReviewRequest]
+  implicit val decoderCreatePullRequest: Decoder[CreatePullRequest] = {
+    val data  = deriveDecoder[CreatePullRequestData]
+    val issue = deriveDecoder[CreatePullRequestIssue]
+    data.widen[CreatePullRequest] or issue.widen[CreatePullRequest]
+  }
+  implicit val decoderCreateReferenceRequest: Decoder[CreateReferenceRequest] =
+    deriveDecoder[CreateReferenceRequest]
+  implicit val decoderDeleteFileRequest: Decoder[DeleteFileRequest] =
+    deriveDecoder[DeleteFileRequest]
+  implicit val decoderEditGistFile: Decoder[EditGistFile]         = deriveDecoder[EditGistFile]
+  implicit val decoderEditGistRequest: Decoder[EditGistRequest]   = deriveDecoder[EditGistRequest]
+  implicit val decoderEditIssueRequest: Decoder[EditIssueRequest] = deriveDecoder[EditIssueRequest]
+  implicit val decoderMilestoneData: Decoder[MilestoneData]       = deriveDecoder[MilestoneData]
 
   implicit val decodeBranchUpdateResponse: Decoder[BranchUpdateResponse] =
     deriveDecoder[BranchUpdateResponse]
-
   implicit val decodeCommitComparisonResponse: Decoder[CommitComparisonResponse] =
     deriveDecoder[CommitComparisonResponse]
 }

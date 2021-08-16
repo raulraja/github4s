@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 47 Degrees Open Source <https://www.47deg.com>
+ * Copyright 2016-2021 47 Degrees Open Source <https://www.47deg.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,34 +64,33 @@ trait ReposSpec extends BaseIntegrationSpec {
 
   "Repos >> getRelease" should "return the expected repos when a valid org is provided" taggedAs Integration in {
 
-    val responseResource = for {
-      client <- clientResource
+    val test = clientResource.use { client =>
+      val gh: Github[IO] = Github[IO](client, accessToken)
 
-      gh: Github[IO] = Github[IO](client, accessToken)
-      releasesIO =
-        gh.repos.listReleases(validRepoOwner, validRepoName, None, headers = headerUserAgent)
+      for {
 
-      releasesResponse <- Resource.liftF(releasesIO)
+        releasesResponse <-
+          gh.repos.listReleases(validRepoOwner, validRepoName, None, headers = headerUserAgent)
 
-      releases <- Resource.liftF(IO.fromEither(releasesResponse.result))
+        releases <- IO.fromEither(releasesResponse.result)
 
-      releasesAreFoundCheck: IO[List[(Release, GHResponse[Option[Release]])]] = releases.map {
-        release =>
-          val releaseIO = gh.repos
-            .getRelease(release.id, validRepoOwner, validRepoName, headers = headerUserAgent)
-          releaseIO.map(r => release -> r)
-      }.sequence
+        responseList: List[(Release, GHResponse[Option[Release]])] <-
+          releases.traverse { release =>
+            val releaseIO = gh.repos
+              .getRelease(release.id, validRepoOwner, validRepoName, headers = headerUserAgent)
+            releaseIO.map(r => release -> r)
+          }
 
-    } yield releasesAreFoundCheck
-
-    val responseList: List[(Release, GHResponse[Option[Release]])] = responseResource
-      .use(identity)
-      .unsafeRunSync()
-
-    forAll(responseList) { case (release, response) =>
-      testIsRight[Option[Release]](response, r => r should contain(release))
-      response.statusCode shouldBe okStatusCode
+      } yield {
+        responseList.foreach { case (release, response) =>
+          testIsRight[Option[Release]](response, r => r should contain(release))
+          response.statusCode shouldBe okStatusCode
+        }
+        succeed
+      }
     }
+
+    test.unsafeToFuture()
   }
 
   "Repos >> LatestRelease" should "return the expected repos when a valid org is provided" taggedAs Integration in {
@@ -179,11 +178,11 @@ trait ReposSpec extends BaseIntegrationSpec {
         headers = headerUserAgent
       )
 
-      fileContentsResponse <- Resource.liftF(fileContentsIO)
+      fileContentsResponse <- Resource.eval(fileContentsIO)
 
       fileContentsEither = fileContentsResponse.result
 
-      fileContents <- Resource.liftF(IO.fromEither(fileContentsEither))
+      fileContents <- Resource.eval(IO.fromEither(fileContentsEither))
 
       blobContentIO = res.gitData.getBlob(
         owner = validRepoOwner,
@@ -192,7 +191,7 @@ trait ReposSpec extends BaseIntegrationSpec {
         headers = headerUserAgent
       )
 
-      blobContentResponse <- Resource.liftF(blobContentIO)
+      blobContentResponse <- Resource.eval(blobContentIO)
 
     } yield (blobContentResponse, fileContents.head)
 
@@ -451,5 +450,59 @@ trait ReposSpec extends BaseIntegrationSpec {
 
     testIsLeft[NotFoundError, List[Status]](response)
     response.statusCode shouldBe notFoundStatusCode
+  }
+
+  "Repos >> Search" should "return at least one repository for a valid query" taggedAs Integration in {
+    val params = List(LanguageParam("scala"), TopicParam("jekyll"))
+    val response = clientResource
+      .use { client =>
+        Github[IO](client, accessToken).repos
+          .searchRepos("sbt-microsites", params, None, headerUserAgent)
+      }
+      .unsafeRunSync()
+
+    testIsRight[SearchReposResult](
+      response,
+      { r =>
+        r.total_count > 0 shouldBe true
+        r.items.nonEmpty shouldBe true
+      }
+    )
+    response.statusCode shouldBe okStatusCode
+  }
+
+  it should "successfully return results when a valid repo is provided using <owner>/<name> syntax" taggedAs Integration in {
+    val response = clientResource
+      .use { client =>
+        Github[IO](client, accessToken).repos
+          .searchRepos(s"$validRepoOwner/$validRepoName", Nil)
+      }
+      .unsafeRunSync()
+
+    testIsRight[SearchReposResult](
+      response,
+      { r =>
+        r.total_count > 0 shouldBe true
+        r.items.nonEmpty shouldBe true
+      }
+    )
+  }
+
+  it should "return an empty result for a non existent query string" taggedAs Integration in {
+    val response = clientResource
+      .use { client =>
+        Github[IO](client, accessToken).repos
+          .searchRepos(nonExistentSearchQuery, validSearchParams, None, headerUserAgent)
+      }
+      .unsafeRunSync()
+
+    testIsRight[SearchReposResult](
+      response,
+      { r =>
+        r.total_count shouldBe 0
+        r.items.nonEmpty shouldBe false
+      }
+    )
+    response.statusCode shouldBe okStatusCode
   }
 }

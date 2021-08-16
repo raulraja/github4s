@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 47 Degrees Open Source <https://www.47deg.com>
+ * Copyright 2016-2021 47 Degrees Open Source <https://www.47deg.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,32 +70,48 @@ trait Repositories[F[_]] {
   ): F[GHResponse[List[Repository]]]
 
   /**
+   * Search all repositories on GitHub.
+   *
+   * @param query The query string for the search.
+   * @param searchParams List of search params.
+   * @param pagination Limit and Offset for pagination
+   * @param headers Optional headers to include in the request.
+   * @return A GHResponse with the result of the search
+   */
+  def searchRepos(
+      query: String,
+      searchParams: List[SearchParam],
+      pagination: Option[Pagination] = None,
+      headers: Map[String, String] = Map.empty
+  ): F[GHResponse[SearchReposResult]]
+
+  /**
    * Get the contents of a file or directory in a repository.
    *
    * The response could be a:
-   *  - file
-   *  - directory
-   *   The response will be an array of objects, one object for each item in the directory.
-   *   When listing the contents of a directory, submodules have their "type" specified as "file".
-   *  - symlink
-   *   If the requested :path points to a symlink, and the symlink's target is a normal file in the repository,
-   *   then the API responds with the content of the file.
-   *   Otherwise, the API responds with an object describing the symlink itself.
-   *  - submodule
-   *   The submodule_git_url identifies the location of the submodule repository,
-   *   and the sha identifies a specific commit within the submodule repository.
-   *   Git uses the given URL when cloning the submodule repository,
-   *   and checks out the submodule at that specific commit.
-   *   If the submodule repository is not hosted on github.com, the Git URLs (git_url and _links["git"])
-   *   and the github.com URLs (html_url and _links["html"]) will have null values
+   *   - file
+   *   - directory
+   *    The response will be an array of objects, one object for each item in the directory.
+   *    When listing the contents of a directory, submodules have their "type" specified as "file".
+   *   - symlink
+   *    If the requested :path points to a symlink, and the symlink's target is a normal file in the repository,
+   *    then the API responds with the content of the file.
+   *    Otherwise, the API responds with an object describing the symlink itself.
+   *   - submodule
+   *    The submodule_git_url identifies the location of the submodule repository,
+   *    and the sha identifies a specific commit within the submodule repository.
+   *    Git uses the given URL when cloning the submodule repository,
+   *    and checks out the submodule at that specific commit.
+   *    If the submodule repository is not hosted on github.com, the Git URLs (git_url and _links["git"])
+   *    and the github.com URLs (html_url and _links["html"]) will have null values
    *
    * @param owner of the repo
    * @param repo name of the repo
    * @param path the content path
-   * @param ref the name of the commit/branch/tag. Default: the repository’s default branch (usually `master`)
+   * @param ref the name of the commit/branch/tag. Default: the repository’s default branch (usually `master` or `main`)
    * @param pagination Limit and Offset for pagination
    * @param headers optional user headers to include in the request
-   * @return GHResponse with the content defails
+   * @return GHResponse with the content details
    */
   def getContents(
       owner: String,

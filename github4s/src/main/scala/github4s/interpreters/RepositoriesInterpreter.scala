@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 47 Degrees Open Source <https://www.47deg.com>
+ * Copyright 2016-2021 47 Degrees Open Source <https://www.47deg.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package github4s.interpreters
 import cats.Functor
 import cats.data.NonEmptyList
 import cats.syntax.functor._
-import com.github.marklister.base64.Base64._
+import github4s.internal.Base64._
 import github4s.Decoders._
 import github4s.Encoders._
 import github4s.GHResponse
@@ -60,6 +60,19 @@ class RepositoriesInterpreter[F[_]: Functor](implicit
       s"users/$user/repos",
       headers,
       `type`.fold(Map.empty[String, String])(t => Map("type" -> t)),
+      pagination
+    )
+
+  override def searchRepos(
+      query: String,
+      searchParams: List[SearchParam],
+      pagination: Option[Pagination],
+      headers: Map[String, String] = Map.empty
+  ): F[GHResponse[SearchReposResult]] =
+    client.get[SearchReposResult](
+      "search/repositories",
+      headers,
+      params = Map("q" -> s"$query+${searchParams.map(_.value).mkString("+")}"),
       pagination
     )
 

@@ -1,5 +1,56 @@
 # Changelog
 
+## [v0.28.1](https://github.com/47degrees/github4s/tree/v0.28.1) (2021-01-28)
+
+[Full Changelog](https://github.com/47degrees/github4s/compare/v0.28.0...v0.28.1)
+
+## [v0.28.0](https://github.com/47degrees/github4s/tree/v0.28.0) (2021-01-27)
+
+[Full Changelog](https://github.com/47degrees/github4s/compare/v0.27.1...v0.28.0)
+
+🐛 **Bug Fixes**
+
+- Fix \#569 - Manually encode Uri query parameters [\#596](https://github.com/47degrees/github4s/pull/596) ([sloshy](https://github.com/sloshy))
+- Unbreak the build \(fix \#586 \#597\) [\#595](https://github.com/47degrees/github4s/pull/595) ([sloshy](https://github.com/sloshy))
+
+📈 **Dependency updates**
+
+- Update Scala: 2.12.12/2.13.4, sbt-mdoc: 2.2.16 [\#601](https://github.com/47degrees/github4s/pull/601) ([sloshy](https://github.com/sloshy))
+- Update http4s-blaze-client, http4s-circe, ... to 0.21.16 [\#600](https://github.com/47degrees/github4s/pull/600) ([47erbot](https://github.com/47erbot))
+- Update base64 to 0.3.0 [\#598](https://github.com/47degrees/github4s/pull/598) ([47erbot](https://github.com/47erbot))
+- Update http4s-blaze-client, http4s-circe, ... to 0.21.15 [\#594](https://github.com/47degrees/github4s/pull/594) ([47erbot](https://github.com/47erbot))
+- Update sbt to 1.4.6 [\#593](https://github.com/47degrees/github4s/pull/593) ([47erbot](https://github.com/47erbot))
+- Update sbt-microsites to 1.3.0 [\#592](https://github.com/47degrees/github4s/pull/592) ([47erbot](https://github.com/47erbot))
+- Update cats-core to 2.3.1 [\#591](https://github.com/47degrees/github4s/pull/591) ([47erbot](https://github.com/47erbot))
+- Update mdoc, sbt-mdoc to 2.2.14 [\#590](https://github.com/47degrees/github4s/pull/590) ([47erbot](https://github.com/47erbot))
+- Update sbt-github, sbt-github-header, ... to 0.9.0 [\#588](https://github.com/47degrees/github4s/pull/588) ([47erbot](https://github.com/47erbot))
+- Update scalamock to 5.1.0 [\#585](https://github.com/47degrees/github4s/pull/585) ([47erbot](https://github.com/47erbot))
+- Update sbt-tpolecat to 0.1.16 [\#584](https://github.com/47degrees/github4s/pull/584) ([47erbot](https://github.com/47erbot))
+- Update sbt-ci-release to 1.5.5 [\#583](https://github.com/47degrees/github4s/pull/583) ([47erbot](https://github.com/47erbot))
+- Update cats-core to 2.3.0 [\#582](https://github.com/47degrees/github4s/pull/582) ([47erbot](https://github.com/47erbot))
+- Update mdoc, sbt-mdoc to 2.2.13 [\#581](https://github.com/47degrees/github4s/pull/581) ([47erbot](https://github.com/47erbot))
+- Update http4s-blaze-client, http4s-circe, ... to 0.21.13 [\#580](https://github.com/47degrees/github4s/pull/580) ([47erbot](https://github.com/47erbot))
+- Update sbt to 1.4.4 [\#579](https://github.com/47degrees/github4s/pull/579) ([47erbot](https://github.com/47erbot))
+- Update scalatest to 3.2.3 [\#575](https://github.com/47degrees/github4s/pull/575) ([47erbot](https://github.com/47erbot))
+- Update mdoc, sbt-mdoc to 2.2.12 [\#574](https://github.com/47degrees/github4s/pull/574) ([47erbot](https://github.com/47erbot))
+- Update http4s-blaze-client, http4s-circe, ... to 0.21.9 [\#573](https://github.com/47degrees/github4s/pull/573) ([47erbot](https://github.com/47erbot))
+- Update sbt-ci-release to 1.5.4 [\#571](https://github.com/47degrees/github4s/pull/571) ([47erbot](https://github.com/47erbot))
+
+**Closed issues:**
+
+- Remove Auth.newAuth as it has been discontinued [\#597](https://github.com/47degrees/github4s/issues/597)
+- Ignore the reviewers test [\#586](https://github.com/47degrees/github4s/issues/586)
+-  Receive 422 response when searching Issues [\#569](https://github.com/47degrees/github4s/issues/569)
+
+**Merged pull requests:**
+
+- Add draft PRs support [\#577](https://github.com/47degrees/github4s/pull/577) ([kusaeva](https://github.com/kusaeva))
+- Support for review requests [\#576](https://github.com/47degrees/github4s/pull/576) ([reimai](https://github.com/reimai))
+
+## [v0.27.1](https://github.com/47degrees/github4s/tree/v0.27.1) (2020-11-17)
+
+[Full Changelog](https://github.com/47degrees/github4s/compare/v0.27.0...v0.27.1)
+
 ## [v0.27.0](https://github.com/47degrees/github4s/tree/v0.27.0) (2020-11-17)
 
 [Full Changelog](https://github.com/47degrees/github4s/compare/v0.26.0...v0.27.0)
@@ -290,7 +341,6 @@
 - Update sbt to 1.3.7 [\#325](https://github.com/47degrees/github4s/pull/325) ([scala-steward](https://github.com/scala-steward))
 - Update sbt-microsites to 1.1.0 [\#324](https://github.com/47degrees/github4s/pull/324) ([scala-steward](https://github.com/scala-steward))
 - Update sbt to 1.3.6 [\#322](https://github.com/47degrees/github4s/pull/322) ([scala-steward](https://github.com/scala-steward))
-- Update mockserver-netty to 5.8.1 [\#321](https://github.com/47degrees/github4s/pull/321) ([scala-steward](https://github.com/scala-steward))
 - Update cats-core, cats-free to 2.1.0 [\#320](https://github.com/47degrees/github4s/pull/320) ([BenFradet](https://github.com/BenFradet))
 - Active sidebar items [\#319](https://github.com/47degrees/github4s/pull/319) ([AntonioMateoGomez](https://github.com/AntonioMateoGomez))
 - Sbt microsite adaptation [\#317](https://github.com/47degrees/github4s/pull/317) ([AntonioMateoGomez](https://github.com/AntonioMateoGomez))
@@ -472,7 +522,6 @@
 - Release 0.18.4 [\#205](https://github.com/47degrees/github4s/pull/205) ([BenFradet](https://github.com/BenFradet))
 - Change param so we are filtering by label [\#204](https://github.com/47degrees/github4s/pull/204) ([drwlrsn](https://github.com/drwlrsn))
 - Keep circe decoders dry [\#202](https://github.com/47degrees/github4s/pull/202) ([BenFradet](https://github.com/BenFradet))
-- \# Make `body: Option\[String\]` [\#200](https://github.com/47degrees/github4s/pull/200) ([lloydmeta](https://github.com/lloydmeta))
 
 ## [v0.18.3](https://github.com/47degrees/github4s/tree/v0.18.3) (2018-03-11)
 
@@ -481,6 +530,7 @@
 **Merged pull requests:**
 
 - Release 0.18.3 [\#201](https://github.com/47degrees/github4s/pull/201) ([BenFradet](https://github.com/BenFradet))
+- \# Make `body: Option\[String\]` [\#200](https://github.com/47degrees/github4s/pull/200) ([lloydmeta](https://github.com/lloydmeta))
 
 ## [v0.18.2](https://github.com/47degrees/github4s/tree/v0.18.2) (2018-03-07)
 
@@ -493,6 +543,7 @@
 **Merged pull requests:**
 
 - Releases 0.18.2 [\#199](https://github.com/47degrees/github4s/pull/199) ([fedefernandez](https://github.com/fedefernandez))
+- Add pagination support for PullRequest ops [\#198](https://github.com/47degrees/github4s/pull/198) ([lloydmeta](https://github.com/lloydmeta))
 
 ## [v0.18.1](https://github.com/47degrees/github4s/tree/v0.18.1) (2018-02-14)
 
@@ -517,7 +568,6 @@
 
 **Merged pull requests:**
 
-- Add pagination support for PullRequest ops [\#198](https://github.com/47degrees/github4s/pull/198) ([lloydmeta](https://github.com/lloydmeta))
 - Release version 0.18.0 [\#193](https://github.com/47degrees/github4s/pull/193) ([BenFradet](https://github.com/BenFradet))
 - Bump sbt-org-policies to 0.8.22 to benefit from cats 1.0.1 and circe 0.9.1 [\#192](https://github.com/47degrees/github4s/pull/192) ([BenFradet](https://github.com/BenFradet))
 - Get a single issue [\#191](https://github.com/47degrees/github4s/pull/191) ([GRBurst](https://github.com/GRBurst))
@@ -693,7 +743,6 @@
 
 **Merged pull requests:**
 
-- Fixes BuildInfo Code Dependency [\#82](https://github.com/47degrees/github4s/pull/82) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Adds the get contents operation [\#80](https://github.com/47degrees/github4s/pull/80) ([fedefernandez](https://github.com/fedefernandez))
 - Upgrades sbt-org-policies plugin [\#78](https://github.com/47degrees/github4s/pull/78) ([fedefernandez](https://github.com/fedefernandez))
 - Fixes Github token through env var [\#77](https://github.com/47degrees/github4s/pull/77) ([juanpedromoreno](https://github.com/juanpedromoreno))
@@ -789,6 +838,7 @@
 
 - Makes mandatory some fields when creating issues [\#51](https://github.com/47degrees/github4s/pull/51) ([fedefernandez](https://github.com/fedefernandez))
 - Adds a new root project to set Scala version [\#50](https://github.com/47degrees/github4s/pull/50) ([fedefernandez](https://github.com/fedefernandez))
+- Adds create and edit methods for issues [\#49](https://github.com/47degrees/github4s/pull/49) ([fedefernandez](https://github.com/fedefernandez))
 - Adds list and search methods for issues [\#47](https://github.com/47degrees/github4s/pull/47) ([fedefernandez](https://github.com/fedefernandez))
 - Adds crossover for Scala 2.10 and upgrades libraries [\#46](https://github.com/47degrees/github4s/pull/46) ([fedefernandez](https://github.com/fedefernandez))
 - Fix forced user agent in js side [\#43](https://github.com/47degrees/github4s/pull/43) ([jdesiloniz](https://github.com/jdesiloniz))
@@ -813,7 +863,6 @@
 
 **Merged pull requests:**
 
-- Adds create and edit methods for issues [\#49](https://github.com/47degrees/github4s/pull/49) ([fedefernandez](https://github.com/fedefernandez))
 - Upgrades sbt catalyst extras plugin [\#37](https://github.com/47degrees/github4s/pull/37) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Integrates sbt-catalysts-extras and sbt-microsites plugins [\#35](https://github.com/47degrees/github4s/pull/35) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Add method to create gists [\#34](https://github.com/47degrees/github4s/pull/34) ([jdesiloniz](https://github.com/jdesiloniz))

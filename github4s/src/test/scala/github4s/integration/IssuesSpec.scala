@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 47 Degrees Open Source <https://www.47deg.com>
+ * Copyright 2016-2021 47 Degrees Open Source <https://www.47deg.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ trait IssuesSpec extends BaseIntegrationSpec {
     val response = clientResource
       .use { client =>
         Github[IO](client, accessToken).issues
-          .searchIssues(validSearchQuery, validSearchParams, headerUserAgent)
+          .searchIssues(validSearchQuery, validSearchParams, None, headerUserAgent)
       }
       .unsafeRunSync()
 
@@ -66,11 +66,29 @@ trait IssuesSpec extends BaseIntegrationSpec {
     response.statusCode shouldBe okStatusCode
   }
 
+  it should "not regress github #569" taggedAs Integration in {
+    clientResource
+      .use { client =>
+        Github[IO](client, accessToken).issues.searchIssues(
+          "",
+          List(
+            OwnerParamInRepository("47degrees/github4s"),
+            IssueTypePullRequest,
+            LabelParam("bug"),
+            IssueStateOpen
+          )
+        )
+      }
+      .map { response =>
+        response.statusCode shouldBe okStatusCode
+      }
+  }
+
   it should "return an empty result for a non existent query string" taggedAs Integration in {
     val response = clientResource
       .use { client =>
         Github[IO](client, accessToken).issues
-          .searchIssues(nonExistentSearchQuery, validSearchParams, headerUserAgent)
+          .searchIssues(nonExistentSearchQuery, validSearchParams, None, headerUserAgent)
       }
       .unsafeRunSync()
 

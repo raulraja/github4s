@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 47 Degrees Open Source <https://www.47deg.com>
+ * Copyright 2016-2021 47 Degrees Open Source <https://www.47deg.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package github4s.interpreters
 
-import java.net.URLEncoder.encode
 import java.time.ZonedDateTime
 
+import cats.syntax.all._
 import github4s.Decoders._
 import github4s.Encoders._
 import github4s.GHResponse
@@ -48,12 +48,14 @@ class IssuesInterpreter[F[_]](implicit client: HttpClient[F]) extends Issues[F] 
   override def searchIssues(
       query: String,
       searchParams: List[SearchParam],
+      pagination: Option[Pagination] = none,
       headers: Map[String, String]
   ): F[GHResponse[SearchIssuesResult]] =
     client.get[SearchIssuesResult](
       method = "search/issues",
       headers = headers,
-      params = Map("q" -> s"${encode(query, "utf-8")}+${searchParams.map(_.value).mkString("+")}")
+      params = Map("q" -> s"$query+${searchParams.map(_.value).mkString("+")}"),
+      pagination
     )
 
   override def createIssue(

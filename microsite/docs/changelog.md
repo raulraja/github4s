@@ -7,14 +7,84 @@ permalink: changelog
 ---
 # Changelog
 
-## [Unreleased](https://github.com/47degrees/github4s/tree/HEAD)
+## [v0.28.0](https://github.com/47degrees/github4s/tree/v0.28.0) (2021-01-27)
 
-[Full Changelog](https://github.com/47degrees/github4s/compare/v0.26.0...HEAD)
+[Full Changelog](https://github.com/47degrees/github4s/compare/v0.27.1...v0.28.0)
+
+🐛 **Bug Fixes**
+
+- Fix \#569 - Manually encode Uri query parameters [\#596](https://github.com/47degrees/github4s/pull/596) ([sloshy](https://github.com/sloshy))
+- Unbreak the build \(fix \#586 \#597\) [\#595](https://github.com/47degrees/github4s/pull/595) ([sloshy](https://github.com/sloshy))
+
+📈 **Dependency updates**
+
+- Update Scala: 2.12.12/2.13.4, sbt-mdoc: 2.2.16 [\#601](https://github.com/47degrees/github4s/pull/601) ([sloshy](https://github.com/sloshy))
+- Update http4s-blaze-client, http4s-circe, ... to 0.21.16 [\#600](https://github.com/47degrees/github4s/pull/600) ([47erbot](https://github.com/47erbot))
+- Update base64 to 0.3.0 [\#598](https://github.com/47degrees/github4s/pull/598) ([47erbot](https://github.com/47erbot))
+- Update http4s-blaze-client, http4s-circe, ... to 0.21.15 [\#594](https://github.com/47degrees/github4s/pull/594) ([47erbot](https://github.com/47erbot))
+- Update sbt to 1.4.6 [\#593](https://github.com/47degrees/github4s/pull/593) ([47erbot](https://github.com/47erbot))
+- Update sbt-microsites to 1.3.0 [\#592](https://github.com/47degrees/github4s/pull/592) ([47erbot](https://github.com/47erbot))
+- Update cats-core to 2.3.1 [\#591](https://github.com/47degrees/github4s/pull/591) ([47erbot](https://github.com/47erbot))
+- Update mdoc, sbt-mdoc to 2.2.14 [\#590](https://github.com/47degrees/github4s/pull/590) ([47erbot](https://github.com/47erbot))
+- Update sbt-github, sbt-github-header, ... to 0.9.0 [\#588](https://github.com/47degrees/github4s/pull/588) ([47erbot](https://github.com/47erbot))
+- Update scalamock to 5.1.0 [\#585](https://github.com/47degrees/github4s/pull/585) ([47erbot](https://github.com/47erbot))
+- Update sbt-tpolecat to 0.1.16 [\#584](https://github.com/47degrees/github4s/pull/584) ([47erbot](https://github.com/47erbot))
+- Update sbt-ci-release to 1.5.5 [\#583](https://github.com/47degrees/github4s/pull/583) ([47erbot](https://github.com/47erbot))
+- Update cats-core to 2.3.0 [\#582](https://github.com/47degrees/github4s/pull/582) ([47erbot](https://github.com/47erbot))
+- Update mdoc, sbt-mdoc to 2.2.13 [\#581](https://github.com/47degrees/github4s/pull/581) ([47erbot](https://github.com/47erbot))
+- Update http4s-blaze-client, http4s-circe, ... to 0.21.13 [\#580](https://github.com/47degrees/github4s/pull/580) ([47erbot](https://github.com/47erbot))
+- Update sbt to 1.4.4 [\#579](https://github.com/47degrees/github4s/pull/579) ([47erbot](https://github.com/47erbot))
+- Update scalatest to 3.2.3 [\#575](https://github.com/47degrees/github4s/pull/575) ([47erbot](https://github.com/47erbot))
+- Update mdoc, sbt-mdoc to 2.2.12 [\#574](https://github.com/47degrees/github4s/pull/574) ([47erbot](https://github.com/47erbot))
+- Update http4s-blaze-client, http4s-circe, ... to 0.21.9 [\#573](https://github.com/47degrees/github4s/pull/573) ([47erbot](https://github.com/47erbot))
+- Update sbt-ci-release to 1.5.4 [\#571](https://github.com/47degrees/github4s/pull/571) ([47erbot](https://github.com/47erbot))
 
 **Closed issues:**
 
+- Remove Auth.newAuth as it has been discontinued [\#597](https://github.com/47degrees/github4s/issues/597)
+- Ignore the reviewers test [\#586](https://github.com/47degrees/github4s/issues/586)
+-  Receive 422 response when searching Issues [\#569](https://github.com/47degrees/github4s/issues/569)
+
+**Merged pull requests:**
+
+- Add draft PRs support [\#577](https://github.com/47degrees/github4s/pull/577) ([kusaeva](https://github.com/kusaeva))
+- Support for review requests [\#576](https://github.com/47degrees/github4s/pull/576) ([reimai](https://github.com/reimai))
+
+## [v0.27.1](https://github.com/47degrees/github4s/tree/v0.27.1) (2020-11-17)
+
+[Full Changelog](https://github.com/47degrees/github4s/compare/v0.27.0...v0.27.1)
+
+## [v0.27.0](https://github.com/47degrees/github4s/tree/v0.27.0) (2020-11-17)
+
+[Full Changelog](https://github.com/47degrees/github4s/compare/v0.26.0...v0.27.0)
+
+⚠️ **Breaking changes**
+
+- make accessToken an io to use gh app's expiring tokens [\#567](https://github.com/47degrees/github4s/pull/567) ([reimai](https://github.com/reimai))
+
+📈 **Dependency updates**
+
+- Update sbt to 1.4.3 [\#570](https://github.com/47degrees/github4s/pull/570) ([47erbot](https://github.com/47erbot))
+- Update sbt to 1.4.2 [\#566](https://github.com/47degrees/github4s/pull/566) ([47erbot](https://github.com/47erbot))
+- Update sbt to 1.4.1 [\#562](https://github.com/47degrees/github4s/pull/562) ([47erbot](https://github.com/47erbot))
+- Update scalafmt-core to 2.7.5 [\#561](https://github.com/47degrees/github4s/pull/561) ([47erbot](https://github.com/47erbot))
+- Update sbt-mdoc to 2.2.10 [\#560](https://github.com/47degrees/github4s/pull/560) ([47erbot](https://github.com/47erbot))
+- Update http4s-blaze-client, http4s-circe, ... to 0.21.8 [\#559](https://github.com/47degrees/github4s/pull/559) ([47erbot](https://github.com/47erbot))
+- Update sbt-tpolecat to 0.1.14 [\#558](https://github.com/47degrees/github4s/pull/558) ([47erbot](https://github.com/47erbot))
+- Update scalafmt-core to 2.7.4 [\#557](https://github.com/47degrees/github4s/pull/557) ([47erbot](https://github.com/47erbot))
+- Update sbt to 1.4.0 [\#556](https://github.com/47degrees/github4s/pull/556) ([47erbot](https://github.com/47erbot))
+- Update scalafmt-core to 2.7.3 [\#555](https://github.com/47degrees/github4s/pull/555) ([47erbot](https://github.com/47erbot))
+
+**Closed issues:**
+
+- Support creation of pull request reviews [\#563](https://github.com/47degrees/github4s/issues/563)
 - Default value for optional field [\#549](https://github.com/47degrees/github4s/issues/549)
 - Include "permissions" in domain objects [\#526](https://github.com/47degrees/github4s/issues/526)
+
+**Merged pull requests:**
+
+- Repository model enriched: Archived status available now [\#565](https://github.com/47degrees/github4s/pull/565) ([nihirash](https://github.com/nihirash))
+- Support a creation of pull request reviews [\#564](https://github.com/47degrees/github4s/pull/564) ([kusaeva](https://github.com/kusaeva))
 
 ## [v0.26.0](https://github.com/47degrees/github4s/tree/v0.26.0) (2020-09-23)
 
@@ -403,6 +473,7 @@ permalink: changelog
 **Merged pull requests:**
 
 - Release 0.18.8 [\#221](https://github.com/47degrees/github4s/pull/221) ([BenFradet](https://github.com/BenFradet))
+- Add cla-bot to the Github4s in the wild section [\#220](https://github.com/47degrees/github4s/pull/220) ([BenFradet](https://github.com/BenFradet))
 
 ## [v0.18.7](https://github.com/47degrees/github4s/tree/v0.18.7) (2018-08-20)
 
@@ -410,7 +481,6 @@ permalink: changelog
 
 **Merged pull requests:**
 
-- Add cla-bot to the Github4s in the wild section [\#220](https://github.com/47degrees/github4s/pull/220) ([BenFradet](https://github.com/BenFradet))
 - Release 0.18.7 [\#219](https://github.com/47degrees/github4s/pull/219) ([BenFradet](https://github.com/BenFradet))
 - Add listCollaborators method [\#218](https://github.com/47degrees/github4s/pull/218) ([asoltysik](https://github.com/asoltysik))
 - add get tree api implementation [\#217](https://github.com/47degrees/github4s/pull/217) ([aberey](https://github.com/aberey))
@@ -706,7 +776,6 @@ permalink: changelog
 - Updates the headers and formatting [\#72](https://github.com/47degrees/github4s/pull/72) ([fedefernandez](https://github.com/fedefernandez))
 - Git tag feature [\#71](https://github.com/47degrees/github4s/pull/71) ([fedefernandez](https://github.com/fedefernandez))
 - Pull request list [\#70](https://github.com/47degrees/github4s/pull/70) ([fedefernandez](https://github.com/fedefernandez))
-- Excludes BuildInfo class from packaging [\#65](https://github.com/47degrees/github4s/pull/65) ([juanpedromoreno](https://github.com/juanpedromoreno))
 - Update License [\#64](https://github.com/47degrees/github4s/pull/64) ([anamariamv](https://github.com/anamariamv))
 
 ## [v0.12.1](https://github.com/47degrees/github4s/tree/v0.12.1) (2017-03-28)
@@ -717,6 +786,7 @@ permalink: changelog
 
 - Adds some git methods [\#67](https://github.com/47degrees/github4s/pull/67) ([fedefernandez](https://github.com/fedefernandez))
 - Bumps sbt-org-policies plugin version [\#66](https://github.com/47degrees/github4s/pull/66) ([juanpedromoreno](https://github.com/juanpedromoreno))
+- Excludes BuildInfo class from packaging [\#65](https://github.com/47degrees/github4s/pull/65) ([juanpedromoreno](https://github.com/juanpedromoreno))
 
 ## [v0.12.0](https://github.com/47degrees/github4s/tree/v0.12.0) (2017-03-22)
 

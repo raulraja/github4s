@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 47 Degrees Open Source <https://www.47deg.com>
+ * Copyright 2016-2021 47 Degrees Open Source <https://www.47deg.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -296,7 +296,7 @@ trait PullRequestsSpec extends BaseIntegrationSpec {
     response.statusCode shouldBe unprocessableEntityStatusCode
   }
 
-  "PullRequests >> Add/List/Remove Reviewers" should "return the proper reviewers" taggedAs Integration in {
+  "PullRequests >> Add/List/Remove Reviewers" should "return the proper reviewers" taggedAs Integration ignore {
     val addReviewersResponse = clientResource
       .use { client =>
         Github[IO](client, accessToken).pullRequests
@@ -312,7 +312,7 @@ trait PullRequestsSpec extends BaseIntegrationSpec {
 
     testIsRight[PullRequest](
       addReviewersResponse,
-      r => r.body shouldBe validCreatePRReviewRequest.body
+      r => r.body shouldBe Some(validCreatePRReviewRequest.body)
     )
     addReviewersResponse.statusCode shouldBe okStatusCode
 
@@ -352,7 +352,7 @@ trait PullRequestsSpec extends BaseIntegrationSpec {
 
     testIsRight[PullRequest](
       addReviewersResponse,
-      r => r.body shouldBe validCreatePRReviewRequest.body
+      r => r.body shouldBe Some(validCreatePRReviewRequest.body)
     )
     removeReviewersResponse.statusCode shouldBe okStatusCode
   }
