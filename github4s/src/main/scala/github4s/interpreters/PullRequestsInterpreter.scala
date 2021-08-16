@@ -168,8 +168,8 @@ class PullRequestsInterpreter[F[_]](implicit client: HttpClient[F]) extends Pull
       pullRequest: Int,
       expectedHeadSha: Option[String] = None,
       headers: Map[String, String] = Map()
-  ): F[GHResponse[Unit]] =
-    client.put[BranchUpdateRequest, Unit](
+  ): F[GHResponse[BranchUpdateResponse]] =
+    client.put[BranchUpdateRequest, BranchUpdateResponse](
       s"repos/$owner/$repo/pulls/$pullRequest/update-branch",
       headers ++ acceptPreviewHeader,
       BranchUpdateRequest(expectedHeadSha)
