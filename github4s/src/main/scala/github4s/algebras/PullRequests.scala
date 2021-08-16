@@ -184,7 +184,15 @@ trait PullRequests[F[_]] {
       owner: String,
       repo: String,
       pullRequest: Int,
-      expectedHeadSha: String,
+      expectedHeadSha: Option[String] = None,
       headers: Map[String, String] = Map()
-  ): F[GHResponse[Unit]]
+  ): F[GHResponse[BranchUpdateResponse]]
+
+  def compare(
+      owner: String,
+      repo: String,
+      commitSha: String,
+      baseSha: String,
+      headers: Map[String, String] = Map()
+  ): F[GHResponse[CommitComparisonResponse]]
 }

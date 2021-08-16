@@ -166,12 +166,24 @@ class PullRequestsInterpreter[F[_]](implicit client: HttpClient[F]) extends Pull
       owner: String,
       repo: String,
       pullRequest: Int,
-      expectedHeadSha: String,
+      expectedHeadSha: Option[String] = None,
       headers: Map[String, String] = Map()
   ): F[GHResponse[Unit]] =
     client.put[BranchUpdateRequest, Unit](
       s"repos/$owner/$repo/pulls/$pullRequest/update-branch",
       headers ++ acceptPreviewHeader,
       BranchUpdateRequest(expectedHeadSha)
+    )
+
+  override def compare(
+      owner: String,
+      repo: String,
+      commitSha: String,
+      baseSha: String,
+      headers: Map[String, String] = Map()
+  ): F[GHResponse[CommitComparisonResponse]] =
+    client.get[CommitComparisonResponse](
+      s"repos/$owner/$repo/compare/$baseSha...$commitSha",
+      headers
     )
 }

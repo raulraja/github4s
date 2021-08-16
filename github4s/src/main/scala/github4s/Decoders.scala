@@ -25,7 +25,7 @@ import github4s.domain._
 import io.circe.Decoder.Result
 import io.circe._
 import io.circe.generic.auto._
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 /**
  * Implicit circe decoders of domains objects
@@ -297,4 +297,10 @@ object Decoders {
 
   implicit val decodeReviewers: Decoder[ReviewersResponse] =
     deriveDecoder[ReviewersResponse]
+
+  implicit val decodeBranchUpdateResponse: Decoder[BranchUpdateResponse] =
+    deriveDecoder[BranchUpdateResponse]
+
+  implicit val decodeCommitComparisonResponse: Decoder[CommitComparisonResponse] =
+    deriveDecoder[CommitComparisonResponse]
 }
