@@ -174,7 +174,7 @@ Accepts these parameters:
 ```scala mdoc:compile-only
 import github4s.domain.BranchUpdateResponse
 
-val updatePullRequestBranch = gh.pullRequests.updatebranch(
+val updatePullRequestBranch = gh.pullRequests.updateBranch(
   "47deg",
   "github4s",
   567,
