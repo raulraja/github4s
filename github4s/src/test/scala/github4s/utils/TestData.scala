@@ -493,7 +493,8 @@ trait TestData {
   val validBranchUpdateResponse =
     BranchUpdateResponse(
       "Updating pull request branch.",
-      s"https://github.com/repos/$validRepoOwner/$validRepoName/pulls/$validPullRequestNumber")
+      s"https://github.com/repos/$validRepoOwner/$validRepoName/pulls/$validPullRequestNumber"
+    )
 
   val validCommitComparisonResponse = CommitComparisonResponse("behind", 1, 2, 100)
 

@@ -439,8 +439,7 @@ class ReposSpec extends BaseSpec {
   "Repos.compare" should "call to httpClient.get with the right parameters" in {
 
     implicit val httpClientMock: HttpClient[IO] = httpClientMockGet[CommitComparisonResponse](
-      url =
-        s"repos/$validRepoOwner/$validRepoName/compare/$validCommitSha...$validMergeCommitSha",
+      url = s"repos/$validRepoOwner/$validRepoName/compare/$validCommitSha...$validMergeCommitSha",
       response = IO.pure(validCommitComparisonResponse)
     )
 

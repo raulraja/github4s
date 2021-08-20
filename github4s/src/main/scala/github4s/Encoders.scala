@@ -183,7 +183,8 @@ object Encoders {
     deriveEncoder[NewReleaseRequest]
   implicit val encoderNewStatusRequest: Encoder[NewStatusRequest] = deriveEncoder[NewStatusRequest]
   implicit val encoderMilestoneData: Encoder[MilestoneData]       = deriveEncoder[MilestoneData]
-  implicit val encodeBranchUpdateRequest: Encoder[BranchUpdateRequest] = deriveEncoder[BranchUpdateRequest]
+  implicit val encodeBranchUpdateRequest: Encoder[BranchUpdateRequest] =
+    deriveEncoder[BranchUpdateRequest]
 
   implicit val encoderCreateReviewComment: Encoder[CreateReviewComment] =
     deriveEncoder[CreateReviewComment]
@@ -240,7 +241,8 @@ object Encoders {
   implicit val encoderUser: Encoder[User]                         = deriveEncoder[User]
   implicit val encoderComment: Encoder[Comment]                   = deriveEncoder[Comment]
   implicit val encoderMilestone: Encoder[Milestone]               = deriveEncoder[Milestone]
-  implicit val encodeBranchUpdateResponse: Encoder[BranchUpdateResponse] = deriveEncoder[BranchUpdateResponse]
+  implicit val encodeBranchUpdateResponse: Encoder[BranchUpdateResponse] =
+    deriveEncoder[BranchUpdateResponse]
   implicit val encodeFileComparison: Encoder[FileComparison] = deriveEncoder[FileComparison]
   implicit val encodeCommitComparisonResponse: Encoder[CommitComparisonResponse] =
     deriveEncoder[CommitComparisonResponse]

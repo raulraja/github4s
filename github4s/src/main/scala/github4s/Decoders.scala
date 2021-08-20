@@ -268,7 +268,8 @@ object Decoders {
   implicit val decoderNewTagRequest: Decoder[NewTagRequest]       = deriveDecoder[NewTagRequest]
   implicit val decoderNewTreeRequest: Decoder[NewTreeRequest]     = deriveDecoder[NewTreeRequest]
   implicit val decoderNewCommitRequest: Decoder[NewCommitRequest] = deriveDecoder[NewCommitRequest]
-  implicit val decoderBranchUpdateRequest: Decoder[BranchUpdateRequest] = deriveDecoder[BranchUpdateRequest]
+  implicit val decoderBranchUpdateRequest: Decoder[BranchUpdateRequest] =
+    deriveDecoder[BranchUpdateRequest]
 
   implicit def decodeNonEmptyList[T](implicit D: Decoder[T]): Decoder[NonEmptyList[T]] = {
 
