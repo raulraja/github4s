@@ -19,13 +19,14 @@ package github4s.interpreters
 import cats.Functor
 import cats.data.NonEmptyList
 import cats.syntax.functor._
-import github4s.internal.Base64._
 import github4s.Decoders._
 import github4s.Encoders._
 import github4s.GHResponse
 import github4s.algebras.Repositories
+import github4s.domain.RepoUrlKeys.CommitComparisonResponse
 import github4s.domain._
 import github4s.http.HttpClient
+import github4s.internal.Base64._
 
 class RepositoriesInterpreter[F[_]: Functor](implicit
     client: HttpClient[F]
@@ -167,6 +168,18 @@ class RepositoriesInterpreter[F[_]: Functor](implicit
         key -> value
       },
       pagination
+    )
+
+  override def compareCommits(
+      owner: String,
+      repo: String,
+      commitSha: String,
+      baseSha: String,
+      headers: Map[String, String] = Map()
+  ): F[GHResponse[CommitComparisonResponse]] =
+    client.get[CommitComparisonResponse](
+      s"repos/$owner/$repo/compare/$baseSha...$commitSha",
+      headers
     )
 
   override def listBranches(
@@ -344,5 +357,4 @@ class RepositoriesInterpreter[F[_]: Functor](implicit
         response.copy(result = Right(false))
       case Left(error) => GHResponse(Left(error), response.statusCode, response.headers)
     }
-
 }

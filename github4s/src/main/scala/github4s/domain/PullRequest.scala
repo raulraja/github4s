@@ -154,5 +154,3 @@ final case class ReviewersResponse(
 
 final case class BranchUpdateRequest(expected_head_sha: Option[String])
 final case class BranchUpdateResponse(message: String, url: String)
-final case class CommitComparisonResponse(status: String, ahead_by: Int, behind_by: Int, total_commits: Int)
-

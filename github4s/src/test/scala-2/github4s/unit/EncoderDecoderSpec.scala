@@ -5,6 +5,7 @@ import com.eed3si9n.expecty.Expecty
 import github4s.ArbitraryDerivation
 import github4s.Decoders._
 import github4s.Encoders._
+import github4s.domain.RepoUrlKeys.CommitComparisonResponse
 import github4s.domain._
 import io.circe.{Decoder, Encoder, Printer}
 import org.scalacheck.fortyseven.GenInstances._
@@ -133,6 +134,9 @@ class EncoderDecoderSpec extends AnyFlatSpec with ScalaCheckPropertyChecks {
   test[Repository]
   test[ReviewersRequest]
   test[ReviewersResponse]
+  test[BranchUpdateRequest]
+  test[BranchUpdateResponse]
+  test[CommitComparisonResponse]
   test[SearchIssuesResult]
   test[SearchReposResult]
   test[Stargazer]

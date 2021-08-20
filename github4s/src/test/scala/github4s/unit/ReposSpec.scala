@@ -20,6 +20,7 @@ import cats.data.NonEmptyList
 import cats.effect.IO
 import github4s.Decoders._
 import github4s.Encoders._
+import github4s.domain.RepoUrlKeys.CommitComparisonResponse
 import github4s.domain._
 import github4s.http.HttpClient
 import github4s.internal.Base64._
@@ -434,4 +435,26 @@ class ReposSpec extends BaseSpec {
 
     repos.searchRepos("", validSearchParams, None, headerUserAgent).shouldNotFail
   }
+
+  "Repos.compare" should "call to httpClient.get with the right parameters" in {
+
+    implicit val httpClientMock: HttpClient[IO] = httpClientMockGet[CommitComparisonResponse](
+      url =
+        s"repos/$validRepoOwner/$validRepoName/compare/$validCommitSha...$validMergeCommitSha",
+      response = IO.pure(validCommitComparisonResponse)
+    )
+
+    val repos = new RepositoriesInterpreter[IO]
+
+    repos
+      .compareCommits(
+        validRepoOwner,
+        validRepoName,
+        validCommitSha,
+        validMergeCommitSha,
+        headerUserAgent
+      )
+      .shouldNotFail
+  }
+
 }

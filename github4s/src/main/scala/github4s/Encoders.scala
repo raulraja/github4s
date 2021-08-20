@@ -16,6 +16,7 @@
 
 package github4s
 
+import github4s.domain.RepoUrlKeys.{CommitComparisonResponse, FileComparison}
 import github4s.domain._
 import io.circe._
 import io.circe.generic.semiauto.deriveEncoder
@@ -182,6 +183,8 @@ object Encoders {
     deriveEncoder[NewReleaseRequest]
   implicit val encoderNewStatusRequest: Encoder[NewStatusRequest] = deriveEncoder[NewStatusRequest]
   implicit val encoderMilestoneData: Encoder[MilestoneData]       = deriveEncoder[MilestoneData]
+  implicit val encodeBranchUpdateRequest: Encoder[BranchUpdateRequest] = deriveEncoder[BranchUpdateRequest]
+
   implicit val encoderCreateReviewComment: Encoder[CreateReviewComment] =
     deriveEncoder[CreateReviewComment]
   implicit val encodeNewPullRequestReview: Encoder[CreatePRReviewRequest] =
@@ -237,6 +240,8 @@ object Encoders {
   implicit val encoderUser: Encoder[User]                         = deriveEncoder[User]
   implicit val encoderComment: Encoder[Comment]                   = deriveEncoder[Comment]
   implicit val encoderMilestone: Encoder[Milestone]               = deriveEncoder[Milestone]
-  implicit val encodeBranchUpdateRequest: Encoder[BranchUpdateRequest] =
-    deriveEncoder[BranchUpdateRequest]
+  implicit val encodeBranchUpdateResponse: Encoder[BranchUpdateResponse] = deriveEncoder[BranchUpdateResponse]
+  implicit val encodeFileComparison: Encoder[FileComparison] = deriveEncoder[FileComparison]
+  implicit val encodeCommitComparisonResponse: Encoder[CommitComparisonResponse] =
+    deriveEncoder[CommitComparisonResponse]
 }

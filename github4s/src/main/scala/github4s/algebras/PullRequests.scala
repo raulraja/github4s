@@ -180,19 +180,16 @@ trait PullRequests[F[_]] {
       headers: Map[String, String] = Map()
   ): F[GHResponse[PullRequest]]
 
+  /**
+   * @param iAgreeToUseExperimentalApi This call is an experimental API and could be subject to change,
+   *                                   use 'true' to use it
+   */
   def updateBranch(
       owner: String,
       repo: String,
       pullRequest: Int,
+      iAgreeToUseExperimentalApi: Boolean,
       expectedHeadSha: Option[String] = None,
       headers: Map[String, String] = Map()
   ): F[GHResponse[BranchUpdateResponse]]
-
-  def compare(
-      owner: String,
-      repo: String,
-      commitSha: String,
-      baseSha: String,
-      headers: Map[String, String] = Map()
-  ): F[GHResponse[CommitComparisonResponse]]
 }

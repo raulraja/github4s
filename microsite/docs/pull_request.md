@@ -14,6 +14,7 @@ with Github4s, you can interact with:
   - [List pull requests](#list-pull-requests)
   - [List the files in a pull request](#list-the-files-in-a-pull-request)
   - [Create a pull request](#create-a-pull-request)
+  - [Update branch](#update-a-pull-request-branch)
 - [Reviews](#reviews)
   - [List reviews](#list-pull-request-reviews)
   - [Get a review](#get-an-individual-review)
@@ -157,6 +158,34 @@ createPullRequestIssue.flatMap(_.result match {
 ```
 
 See [the API doc](https://developer.github.com/v3/pulls/#create-a-pull-request) for full reference.
+
+### Update a pull request branch
+
+Merges the base HEAD into your pull request branch. 
+Note that this is an experimental API, meaning github could stop supporting it at any time. 
+
+Accepts these parameters:
+
+ - the repository coordinates (`owner` and `name` of the repository).
+ - `pullRequest`: integer id of you pr.
+ - `iAgreeToUseExperimentalApi`: your conscious agreement to use an experimental API.
+ - `expectedHeadSha`: The expected SHA of the pull request's HEAD ref for an optional check on github's side.
+
+```scala mdoc:compile-only
+import github4s.domain.BranchUpdateResponse
+
+val updatePullRequestBranch = gh.pullRequests.updatebranch(
+  "47deg",
+  "github4s",
+  567,
+  iAgreeToUseExperimentalApi = true)  
+updatePullRequestBranch.flatMap(_.result match {
+  case Left(e)  => IO.println(s"Something went wrong: ${e.getMessage}")
+  case Right(r) => IO.println(r)
+})
+```
+
+See [the API doc](https://developer.github.com/v3/pulls/#update-a-pull-request-branch) for full reference.
 
 ## Reviews
 

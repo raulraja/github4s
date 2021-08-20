@@ -18,6 +18,7 @@ package github4s
 
 import cats.data.NonEmptyList
 import cats.syntax.all._
+import github4s.domain.RepoUrlKeys.{CommitComparisonResponse, FileComparison}
 import github4s.domain._
 import io.circe.Decoder.Result
 import io.circe._
@@ -241,6 +242,8 @@ object Decoders {
         )
       )
 
+  implicit val decoderFileComparison: Decoder[FileComparison] = deriveDecoder[FileComparison]
+
   implicit val decoderCreatePullRequestData: Decoder[CreatePullRequestData] =
     deriveDecoder[CreatePullRequestData]
   implicit val decoderCreatePullRequestIssue: Decoder[CreatePullRequestIssue] =
@@ -265,6 +268,7 @@ object Decoders {
   implicit val decoderNewTagRequest: Decoder[NewTagRequest]       = deriveDecoder[NewTagRequest]
   implicit val decoderNewTreeRequest: Decoder[NewTreeRequest]     = deriveDecoder[NewTreeRequest]
   implicit val decoderNewCommitRequest: Decoder[NewCommitRequest] = deriveDecoder[NewCommitRequest]
+  implicit val decoderBranchUpdateRequest: Decoder[BranchUpdateRequest] = deriveDecoder[BranchUpdateRequest]
 
   implicit def decodeNonEmptyList[T](implicit D: Decoder[T]): Decoder[NonEmptyList[T]] = {
 

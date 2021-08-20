@@ -20,6 +20,7 @@ with Github4s, you can interact with:
   - [Get repository permissions for a user](#get-repository-permissions-for-a-user)
 - [Commits](#commits)
   - [List commits on a repository](#list-commits-on-a-repository)
+  - [Compare commits on a repository](#compare-commits-on-a-repository)
 - [Contents](#contents)
   - [Get contents](#get-contents)
   - [Create a File](#create-a-file)
@@ -261,6 +262,34 @@ listCommits.flatMap(_.result match {
 The `result` on the right is the corresponding [List[Commit]][repository-scala].
 
 See [the API doc](https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository) for full
+reference.
+
+### Compare commits on a repository
+
+You can compare two commits using `compareCommits`, it takes as arguments:
+
+- the repository coordinates (`owner` and `name` of the repository).
+- `commitSha` or branch to identify the commit you want to check.
+- `baseSha`: or branch you're comparing the commitSha against
+
+To compare commits:
+
+```scala mdoc:compile-only
+val compareCommits =
+  gh.repos.compareCommits(
+  "47deg",
+  "github4s",
+  "d3b048c1f500ee5450e5d7b3d1921ed3e7645891",
+  "main")
+compareCommits.flatMap(_.result match {
+  case Left(e)  => IO.println(s"Something went wrong: ${e.getMessage}")
+  case Right(r) => IO.println(r)
+})
+```
+
+The `result` on the right is the corresponding [List[CommitComparisonResponse]][repository-scala].
+
+See [the API doc](https://developer.github.com/v3/repos/#compare-two-commits) for full
 reference.
 
 ## Branches

@@ -22,7 +22,6 @@ import github4s.GHResponse
 import github4s.algebras.PullRequests
 import github4s.domain._
 import github4s.http.HttpClient
-import github4s.http.RequestBuilder.acceptPreviewHeader
 
 class PullRequestsInterpreter[F[_]](implicit client: HttpClient[F]) extends PullRequests[F] {
 
@@ -166,24 +165,14 @@ class PullRequestsInterpreter[F[_]](implicit client: HttpClient[F]) extends Pull
       owner: String,
       repo: String,
       pullRequest: Int,
+      iAgreeToUseExperimentalApi: Boolean,
       expectedHeadSha: Option[String] = None,
       headers: Map[String, String] = Map()
   ): F[GHResponse[BranchUpdateResponse]] =
     client.put[BranchUpdateRequest, BranchUpdateResponse](
       s"repos/$owner/$repo/pulls/$pullRequest/update-branch",
-      headers ++ acceptPreviewHeader,
+      headers ++
+        Option("Accept" -> "application/vnd.github.lydian-preview+json").filter(_ => iAgreeToUseExperimentalApi),
       BranchUpdateRequest(expectedHeadSha)
-    )
-
-  override def compare(
-      owner: String,
-      repo: String,
-      commitSha: String,
-      baseSha: String,
-      headers: Map[String, String] = Map()
-  ): F[GHResponse[CommitComparisonResponse]] =
-    client.get[CommitComparisonResponse](
-      s"repos/$owner/$repo/compare/$baseSha...$commitSha",
-      headers
     )
 }
