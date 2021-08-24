@@ -162,13 +162,12 @@ See [the API doc](https://developer.github.com/v3/pulls/#create-a-pull-request) 
 ### Update a pull request branch
 
 Merges the base HEAD into your pull request branch. 
-Note that this is an experimental API, meaning github could stop supporting it at any time. 
+Note that this is an experimental API, meaning github could stop supporting it at any time or change in an incompatible way. 
 
 Accepts these parameters:
 
  - the repository coordinates (`owner` and `name` of the repository).
  - `pullRequest`: integer id of you pr.
- - `iAgreeToUseExperimentalApi`: your conscious agreement to use an experimental API.
  - `expectedHeadSha`: The expected SHA of the pull request's HEAD ref for an optional check on github's side.
 
 ```scala mdoc:compile-only
@@ -177,8 +176,7 @@ import github4s.domain.BranchUpdateResponse
 val updatePullRequestBranch = gh.pullRequests.updateBranch(
   "47deg",
   "github4s",
-  567,
-  iAgreeToUseExperimentalApi = true)  
+  567)  
 updatePullRequestBranch.flatMap(_.result match {
   case Left(e)  => IO.println(s"Something went wrong: ${e.getMessage}")
   case Right(r) => IO.println(r)

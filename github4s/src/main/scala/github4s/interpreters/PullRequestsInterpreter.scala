@@ -165,14 +165,12 @@ class PullRequestsInterpreter[F[_]](implicit client: HttpClient[F]) extends Pull
       owner: String,
       repo: String,
       pullRequest: Int,
-      iAgreeToUseExperimentalApi: Boolean,
       expectedHeadSha: Option[String] = None,
       headers: Map[String, String] = Map()
   ): F[GHResponse[BranchUpdateResponse]] =
     client.put[BranchUpdateRequest, BranchUpdateResponse](
       s"repos/$owner/$repo/pulls/$pullRequest/update-branch",
-      headers ++ Option("Accept" -> "application/vnd.github.lydian-preview+json")
-        .filter(_ => iAgreeToUseExperimentalApi),
+      headers ++ Seq("Accept" -> "application/vnd.github.lydian-preview+json"),
       BranchUpdateRequest(expectedHeadSha)
     )
 }

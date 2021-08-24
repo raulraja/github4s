@@ -277,7 +277,6 @@ class PullRequestsSpec extends BaseSpec {
         validRepoOwner,
         validRepoName,
         validPullRequestNumber,
-        iAgreeToUseExperimentalApi = true,
         None,
         headerUserAgent
       )

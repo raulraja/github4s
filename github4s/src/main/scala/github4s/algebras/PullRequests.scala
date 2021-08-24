@@ -181,14 +181,12 @@ trait PullRequests[F[_]] {
   ): F[GHResponse[PullRequest]]
 
   /**
-   * @param iAgreeToUseExperimentalApi This call is an experimental API and could be subject to change,
-   *                                   use 'true' to use it
+   * This is an experimental API and could be changed or removed
    */
   def updateBranch(
       owner: String,
       repo: String,
       pullRequest: Int,
-      iAgreeToUseExperimentalApi: Boolean,
       expectedHeadSha: Option[String] = None,
       headers: Map[String, String] = Map()
   ): F[GHResponse[BranchUpdateResponse]]
