@@ -230,6 +230,8 @@ trait Repositories[F[_]] {
   ): F[GHResponse[List[Commit]]]
 
   /**
+   * Compare any two commits in the same repository
+   *
    * @param owner of the repo
    * @param repo name of the repo
    * @param commitSha commit to compare against base
