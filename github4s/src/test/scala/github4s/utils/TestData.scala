@@ -392,6 +392,7 @@ trait TestData {
     "2011-01-26T19:14:43Z",
     "2011-01-26T19:06:43Z",
     RepoStatus(108, 80, 80, 9, 0, true, true, false, true),
+    "main",
     Some(validNote)
   )
 
