@@ -18,6 +18,7 @@ package github4s.algebras
 
 import cats.data.NonEmptyList
 import github4s.GHResponse
+import github4s.domain.RepoUrlKeys.CommitComparisonResponse
 import github4s.domain._
 
 trait Repositories[F[_]] {
@@ -227,6 +228,24 @@ trait Repositories[F[_]] {
       pagination: Option[Pagination] = None,
       headers: Map[String, String] = Map()
   ): F[GHResponse[List[Commit]]]
+
+  /**
+   * Compare any two commits in the same repository
+   *
+   * @param owner of the repo
+   * @param repo name of the repo
+   * @param commitSha commit to compare against base
+   * @param baseSha the base to compare against
+   * @param headers optional user headers to include in the request
+   * @return GhResponse[CommitComparisonResponse] comparison result
+   */
+  def compareCommits(
+      owner: String,
+      repo: String,
+      commitSha: String,
+      baseSha: String,
+      headers: Map[String, String] = Map()
+  ): F[GHResponse[CommitComparisonResponse]]
 
   /**
    * Retrieve list of branches for a repo

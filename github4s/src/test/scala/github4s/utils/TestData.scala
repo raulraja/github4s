@@ -16,8 +16,9 @@
 
 package github4s.utils
 
-import java.util.UUID
+import github4s.domain.RepoUrlKeys.CommitComparisonResponse
 
+import java.util.UUID
 import github4s.internal.Base64._
 import github4s.domain._
 
@@ -488,6 +489,14 @@ trait TestData {
 
   val validRequestedReviewersResponse =
     ReviewersResponse(List(user), List(team))
+
+  val validBranchUpdateResponse =
+    BranchUpdateResponse(
+      "Updating pull request branch.",
+      s"https://github.com/repos/$validRepoOwner/$validRepoName/pulls/$validPullRequestNumber"
+    )
+
+  val validCommitComparisonResponse = CommitComparisonResponse("behind", 1, 2, 100)
 
   val validProjectId   = 4115271L
   val invalidProjectId = 11111L

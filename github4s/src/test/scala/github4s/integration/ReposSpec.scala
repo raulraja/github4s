@@ -20,6 +20,7 @@ import cats.data.NonEmptyList
 import cats.effect.{IO, Resource}
 import cats.implicits._
 import github4s.GHError.{NotFoundError, UnauthorizedError}
+import github4s.domain.RepoUrlKeys.CommitComparisonResponse
 import github4s.domain._
 import github4s.utils.{BaseIntegrationSpec, Integration}
 import github4s.{GHResponse, Github}
@@ -466,6 +467,24 @@ trait ReposSpec extends BaseIntegrationSpec {
       { r =>
         r.total_count > 0 shouldBe true
         r.items.nonEmpty shouldBe true
+      }
+    )
+    response.statusCode shouldBe okStatusCode
+  }
+
+  "Repos >> Compare" should "compare against the base" taggedAs Integration in {
+    val response = clientResource
+      .use { client =>
+        Github[IO](client, accessToken).repos
+          .compareCommits(validRepoOwner, validRepoName, validCommitSha, validBase)
+      }
+      .unsafeRunSync()
+
+    testIsRight[CommitComparisonResponse](
+      response,
+      { r =>
+        r.status shouldBe "behind"
+        r.behind_by should be > 0
       }
     )
     response.statusCode shouldBe okStatusCode
