@@ -19,6 +19,7 @@ with Github4s, you can interact with:</p>
   <li><a href="#commits">Commits</a>
     <ul>
       <li><a href="#list-commits-on-a-repository">List commits on a repository</a></li>
+      <li><a href="#compare-commits-on-a-repository">Compare commits on a repository</a></li>
     </ul>
   </li>
   <li><a href="#contents">Contents</a>
@@ -79,7 +80,7 @@ with Github4s, you can interact with:</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the get <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">Repository</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the get <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Repository</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/#get">the API doc</a> for full
 reference.</p>
@@ -90,7 +91,7 @@ reference.</p>
 
 <ul>
   <li>a <code class="highlighter-rouge">query</code> string (the URL encoding is taken care of by Github4s).</li>
-  <li>a list of <a href="https://github.com/47degrees/github4s/blob/master/github4s/shared/src/main/scala/github4s/free/domain/SearchParam.scala">SearchParam</a>.</li>
+  <li>a list of <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/free/domain/SearchParam.scala">SearchParam</a>.</li>
   <li><code class="highlighter-rouge">pagination</code>: Limit and Offset for pagination.</li>
 </ul>
 
@@ -124,7 +125,7 @@ takes as arguments:</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">List[Repository]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Repository]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/#list-organization-repositories">the API doc</a> for full
 reference.</p>
@@ -149,7 +150,7 @@ takes as arguments:</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">List[Repository]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Repository]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/#list-repositories-for-a-user">the API doc</a> for full
 reference.</p>
@@ -176,7 +177,7 @@ sorted by the number of commits per contributor in descending order.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/User.scala">List[User]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/User.scala">List[User]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/#list-contributors">the API doc</a> for full
 reference.</p>
@@ -201,7 +202,7 @@ For more information take a look at <a href="https://developer.github.com/v3/rep
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/User.scala">List[User]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/User.scala">List[User]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/collaborators/#list-collaborators">the API doc</a> for full
 reference.</p>
@@ -235,7 +236,7 @@ for full reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">UserRepoPermission</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">UserRepoPermission</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/collaborators/#get-repository-permissions-for-a-user">the API doc</a> for full
 reference.</p>
@@ -248,7 +249,7 @@ reference.</p>
 
 <ul>
   <li>the repository coordinates (<code class="highlighter-rouge">owner</code> and <code class="highlighter-rouge">name</code> of the repository).</li>
-  <li><code class="highlighter-rouge">SHA</code> or branch to start listing commits from. Default: the repository’s default branch (usually <code class="highlighter-rouge">master</code>).</li>
+  <li><code class="highlighter-rouge">SHA</code> or branch to start listing commits from. Default: the repository’s default branch (usually <code class="highlighter-rouge">main</code>).</li>
   <li><code class="highlighter-rouge">path</code>: Only commits containing this file path will be returned.</li>
   <li><code class="highlighter-rouge">author</code>: GitHub login or email address by which to filter by commit author.</li>
   <li><code class="highlighter-rouge">since</code>: Only commits after this date will be returned. Format: “YYYY-MM-DDTHH:MM:SSZ”.</li>
@@ -273,9 +274,38 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">List[Commit]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Commit]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository">the API doc</a> for full
+reference.</p>
+
+<h3 id="compare-commits-on-a-repository">Compare commits on a repository</h3>
+
+<p>You can compare two commits using <code class="highlighter-rouge">compareCommits</code>, it takes as arguments:</p>
+
+<ul>
+  <li>the repository coordinates (<code class="highlighter-rouge">owner</code> and <code class="highlighter-rouge">name</code> of the repository).</li>
+  <li><code class="highlighter-rouge">commitSha</code> or branch to identify the commit you want to check.</li>
+  <li><code class="highlighter-rouge">baseSha</code>: or branch you’re comparing the commitSha against</li>
+</ul>
+
+<p>To compare commits:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">compareCommits</span> <span class="k">=</span>
+  <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">compareCommits</span><span class="o">(</span>
+  <span class="s">"47deg"</span><span class="o">,</span>
+  <span class="s">"github4s"</span><span class="o">,</span>
+  <span class="s">"d3b048c1f500ee5450e5d7b3d1921ed3e7645891"</span><span class="o">,</span>
+  <span class="s">"main"</span><span class="o">)</span>
+<span class="nv">compareCommits</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">})</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[CommitComparisonResponse]</a>.</p>
+
+<p>See <a href="https://developer.github.com/v3/repos/#compare-two-commits">the API doc</a> for full
 reference.</p>
 
 <h2 id="branches">Branches</h2>
@@ -302,7 +332,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">List[Branch]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Branch]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/branches/#list-branches">the API doc</a> for full reference.</p>
 
@@ -317,20 +347,20 @@ reference.</p>
 <ul>
   <li>the repository coordinates (<code class="highlighter-rouge">owner</code> and <code class="highlighter-rouge">name</code> of the repository).</li>
   <li><code class="highlighter-rouge">path</code>: The content path.</li>
-  <li><code class="highlighter-rouge">ref</code>: The name of the <code class="highlighter-rouge">commit/branch/tag</code>. Default: the repository’s default branch (usually <code class="highlighter-rouge">master</code>).</li>
+  <li><code class="highlighter-rouge">ref</code>: The name of the <code class="highlighter-rouge">commit/branch/tag</code>. Default: the repository’s default branch (usually <code class="highlighter-rouge">main</code>).</li>
   <li><code class="highlighter-rouge">pagination</code>: Limit and Offset for pagination, optional.</li>
 </ul>
 
 <p>To get contents:</p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">getContents</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">getContents</span><span class="o">(</span><span class="s">"47degrees"</span><span class="o">,</span> <span class="s">"github4s"</span><span class="o">,</span> <span class="s">"README.md"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"s/master"</span><span class="o">))</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">getContents</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">getContents</span><span class="o">(</span><span class="s">"47degrees"</span><span class="o">,</span> <span class="s">"github4s"</span><span class="o">,</span> <span class="s">"README.md"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"s/main"</span><span class="o">))</span>
 <span class="nv">getContents</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
   <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
   <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">NonEmptyList[Content]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">NonEmptyList[Content]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/contents/#get-contents">the API doc</a> for full
 reference.</p>
@@ -442,7 +472,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">List[Release]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Release]</a>.</p>
 
 <h3 id="get-a-single-release">Get a single release</h3>
 
@@ -466,7 +496,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">Option[Release]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Option[Release]</a>.</p>
 
 <h3 id="the-latest-release">The latest release</h3>
 
@@ -488,7 +518,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">Option[Release]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Option[Release]</a>.</p>
 
 <h3 id="create-a-release">Create a release</h3>
 
@@ -500,7 +530,7 @@ reference.</p>
   <li><code class="highlighter-rouge">name</code>: The name of the release.</li>
   <li><code class="highlighter-rouge">body</code>: Text describing the contents of the tag.</li>
   <li><code class="highlighter-rouge">target_commitish</code>: Specifies the commitish value that determines where the <code class="highlighter-rouge">Git tag</code> is created from.
-Can be any branch or commit <code class="highlighter-rouge">SHA</code>. Unused if the <code class="highlighter-rouge">Git tag</code> already exists. Default: the repository’s default branch (usually <code class="highlighter-rouge">master</code>).</li>
+Can be any branch or commit <code class="highlighter-rouge">SHA</code>. Unused if the <code class="highlighter-rouge">Git tag</code> already exists. Default: the repository’s default branch (usually <code class="highlighter-rouge">main</code>).</li>
   <li><code class="highlighter-rouge">draft</code>: true to create a draft (unpublished) release, false to create a published one. Default: false.</li>
   <li><code class="highlighter-rouge">prerelease</code>: true to identify the release as a pre-release. false to identify the release as a full release. Default: false.</li>
 </ul>
@@ -508,14 +538,14 @@ Can be any branch or commit <code class="highlighter-rouge">SHA</code>. Unused i
 <p>To create a release:</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">createRelease</span> <span class="k">=</span>
-  <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">createRelease</span><span class="o">(</span><span class="s">"47degrees"</span><span class="o">,</span> <span class="s">"github4s"</span><span class="o">,</span> <span class="s">"v0.1.0"</span><span class="o">,</span> <span class="s">"v0.1.0"</span><span class="o">,</span> <span class="s">"New access token"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"master"</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="kc">false</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="kc">false</span><span class="o">))</span>
+  <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">createRelease</span><span class="o">(</span><span class="s">"47degrees"</span><span class="o">,</span> <span class="s">"github4s"</span><span class="o">,</span> <span class="s">"v0.1.0"</span><span class="o">,</span> <span class="s">"v0.1.0"</span><span class="o">,</span> <span class="s">"New access token"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"main"</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="kc">false</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="kc">false</span><span class="o">))</span>
 <span class="nv">createRelease</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
   <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
   <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">Release</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Release</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/releases/#create-a-release">the API doc</a> for full
 reference.</p>
@@ -542,7 +572,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">Status</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Status</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/statuses/#create-a-status">the API doc</a> for full
 reference.</p>
@@ -559,14 +589,14 @@ reference.</p>
 
 <p>To list the statuses for a specific ref:</p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">listStatuses</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">listStatuses</span><span class="o">(</span><span class="s">"47degrees"</span><span class="o">,</span> <span class="s">"github4s"</span><span class="o">,</span> <span class="s">"heads/master"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">listStatuses</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">listStatuses</span><span class="o">(</span><span class="s">"47degrees"</span><span class="o">,</span> <span class="s">"github4s"</span><span class="o">,</span> <span class="s">"heads/main"</span><span class="o">)</span>
 <span class="nv">listStatuses</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
   <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
   <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">List[Status]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Status]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/statuses/#list-statuses-for-a-specific-ref">the API doc</a>
 for full reference.</p>
@@ -576,14 +606,14 @@ for full reference.</p>
 <p>Lastly, you can also get the combined status thanks to <code class="highlighter-rouge">getCombinedStatus</code>; it takes the same
 arguments as the operation listing statuses:</p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">combinedStatus</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">getCombinedStatus</span><span class="o">(</span><span class="s">"47degrees"</span><span class="o">,</span> <span class="s">"github4s"</span><span class="o">,</span> <span class="s">"heads/master"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">combinedStatus</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">repos</span><span class="o">.</span><span class="py">getCombinedStatus</span><span class="o">(</span><span class="s">"47degrees"</span><span class="o">,</span> <span class="s">"github4s"</span><span class="o">,</span> <span class="s">"heads/main"</span><span class="o">)</span>
 <span class="nv">combinedStatus</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
   <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
   <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">CombinedStatus</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">CombinedStatus</a>.</p>
 
 <p>Note that the state of the combined status is the product of a heuristic detailed in
 <a href="https://developer.github.com/v3/repos/statuses/#get-the-combined-status-for-a-specific-ref">the API documentation</a>.</p>

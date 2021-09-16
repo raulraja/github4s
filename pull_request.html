@@ -10,6 +10,7 @@ with Github4s, you can interact with:</p>
       <li><a href="#list-pull-requests">List pull requests</a></li>
       <li><a href="#list-the-files-in-a-pull-request">List the files in a pull request</a></li>
       <li><a href="#create-a-pull-request">Create a pull request</a></li>
+      <li><a href="#update-a-pull-request-branch">Update branch</a></li>
     </ul>
   </li>
   <li><a href="#reviews">Reviews</a>
@@ -62,7 +63,7 @@ with Github4s, you can interact with:</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequest</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequest</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/pulls/#get-a-single-pull-request">the API doc</a> for full reference.</p>
 
@@ -72,7 +73,7 @@ with Github4s, you can interact with:</p>
 
 <ul>
   <li>the repository coordinates (<code class="highlighter-rouge">owner</code> and <code class="highlighter-rouge">name</code> of the repository).</li>
-  <li>a list of <a href="https://github.com/47degrees/github4s/blob/master/github4s/shared/src/main/scala/github4s/free/domain/PullRequest.scala">PRFilter</a>.</li>
+  <li>a list of <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/free/domain/PullRequest.scala">PRFilter</a>.</li>
 </ul>
 
 <p>As an example, let’s say we want the open pull requests in <a href="https://github.com/scala/scala">https://github.com/scala/scala</a> sorted
@@ -87,7 +88,7 @@ by popularity:</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the matching <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">List[PullRequest]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the matching <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/PullRequest.scala">List[PullRequest]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/pulls/#list-pull-requests">the API doc</a> for full reference.</p>
 
@@ -109,7 +110,7 @@ by popularity:</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>the <code class="highlighter-rouge">result</code> on the right is the <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">List[PullRequestFile]</a>.</p>
+<p>the <code class="highlighter-rouge">result</code> on the right is the <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/PullRequest.scala">List[PullRequestFile]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/pulls/#list-pull-requests-files">the API doc</a> for full
 reference.</p>
@@ -165,6 +166,33 @@ instead of the title and body.</p>
 
 <p>See <a href="https://developer.github.com/v3/pulls/#create-a-pull-request">the API doc</a> for full reference.</p>
 
+<h3 id="update-a-pull-request-branch">Update a pull request branch</h3>
+
+<p>Merges the base HEAD into your pull request branch. 
+Note that this is an experimental API, meaning github could stop supporting it at any time or change in an incompatible way.</p>
+
+<p>Accepts these parameters:</p>
+
+<ul>
+  <li>the repository coordinates (<code class="highlighter-rouge">owner</code> and <code class="highlighter-rouge">name</code> of the repository).</li>
+  <li><code class="highlighter-rouge">pullRequest</code>: integer id of you pr.</li>
+  <li><code class="highlighter-rouge">expectedHeadSha</code>: The expected SHA of the pull request’s HEAD ref for an optional check on github’s side.</li>
+</ul>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">github4s.domain.BranchUpdateResponse</span>
+
+<span class="k">val</span> <span class="nv">updatePullRequestBranch</span> <span class="k">=</span> <span class="nv">gh</span><span class="o">.</span><span class="py">pullRequests</span><span class="o">.</span><span class="py">updateBranch</span><span class="o">(</span>
+  <span class="s">"47deg"</span><span class="o">,</span>
+  <span class="s">"github4s"</span><span class="o">,</span>
+  <span class="mi">567</span><span class="o">)</span>    
+<span class="nv">updatePullRequestBranch</span><span class="o">.</span><span class="py">flatMap</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">result</span> <span class="k">match</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="nc">Left</span><span class="o">(</span><span class="n">e</span><span class="o">)</span>  <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">s</span><span class="s">"Something went wrong: ${e.getMessage}"</span><span class="o">)</span>
+  <span class="k">case</span> <span class="nc">Right</span><span class="o">(</span><span class="n">r</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nv">IO</span><span class="o">.</span><span class="py">println</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+<span class="o">})</span>
+</code></pre></div></div>
+
+<p>See <a href="https://developer.github.com/v3/pulls/#update-a-pull-request-branch">the API doc</a> for full reference.</p>
+
 <h2 id="reviews">Reviews</h2>
 
 <h3 id="list-pull-request-reviews">List pull request reviews</h3>
@@ -188,7 +216,7 @@ instead of the title and body.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the matching <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">List[PullRequestReview]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the matching <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/PullRequest.scala">List[PullRequestReview]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/pulls/reviews/#list-reviews-on-a-pull-request">the API doc</a> for full reference.</p>
 
@@ -215,7 +243,7 @@ instead of the title and body.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the matching <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequestReview</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the matching <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequestReview</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/pulls/reviews/#get-a-single-review">the API doc</a> for full reference.</p>
 
@@ -246,7 +274,7 @@ instead of the title and body.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequestReview</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequestReview</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/pulls/reviews/#create-a-review-for-a-pull-request">the API doc</a> for full reference.</p>
 
@@ -278,7 +306,7 @@ instead of the title and body.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the updated <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequest</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the updated <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequest</a>.</p>
 
 <p><strong>NOTE</strong>: you can’t request a review from the pr’s author. If your list of added reviewers contains the author, the whole request will be declined.</p>
 
@@ -333,7 +361,7 @@ instead of the title and body.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the updated <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequest</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the updated <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/PullRequest.scala">PullRequest</a>.</p>
 
 <p>See <a href="https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#remove-requested-reviewers-from-a-pull-request">the API doc</a> for full reference.</p>
 

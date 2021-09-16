@@ -71,8 +71,8 @@ JSONs returned by the Github API and Github4s’ own case classes.</p>
 <span class="o">)</span>
 </code></pre></div></div>
 
-<p>We can put it in the <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/">github4s.domain package</a> in the file corresponding to the
-API, here: <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/domain/Repository.scala">Repository</a>.</p>
+<p>We can put it in the <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/">github4s.domain package</a> in the file corresponding to the
+API, here: <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Repository</a>.</p>
 
 <h2 id="algebra">Algebra</h2>
 
@@ -86,12 +86,12 @@ Because our endpoint is part of the repository API, we need to extend the <code 
       <span class="n">headers</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">()</span>
   <span class="o">)</span><span class="k">:</span> <span class="kt">F</span><span class="o">[</span><span class="kt">GHResponse</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Status</span><span class="o">]]]</span>
 </code></pre></div></div>
-<p>This code belongs to the <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/algebras/">github4s.algebras package</a> in the file corresponding
-to the API, here: <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/algebras/Repositories.scala">Repositories</a>.</p>
+<p>This code belongs to the <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/algebras/">github4s.algebras package</a> in the file corresponding
+to the API, here: <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/algebras/Repositories.scala">Repositories</a>.</p>
 
 <h2 id="interpreter">Interpreter</h2>
 
-<p>We’re now ready to make <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/interpreters/RepositoriesInterpreter.scala">our repository interpreter</a> deal with <code class="highlighter-rouge">listStatuses</code>:</p>
+<p>We’re now ready to make <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/interpreters/RepositoriesInterpreter.scala">our repository interpreter</a> deal with <code class="highlighter-rouge">listStatuses</code>:</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">override</span> <span class="k">def</span> <span class="nf">listStatuses</span><span class="o">(</span>
       <span class="n">owner</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
@@ -101,7 +101,7 @@ to the API, here: <a href="https://github.com/47degrees/github4s/blob/master/git
     <span class="nv">client</span><span class="o">.</span><span class="py">get</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">Status</span><span class="o">]](</span><span class="n">accessToken</span><span class="o">,</span> <span class="n">s</span><span class="s">"repos/$owner/$repo/commits/$ref/statuses"</span><span class="o">,</span> <span class="n">headers</span><span class="o">)</span>
 </code></pre></div></div>
 
-<p>This method makes the HTTP call with the help of <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/http/HttpClient.scala">HttpClient</a></p>
+<p>This method makes the HTTP call with the help of <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/http/HttpClient.scala">HttpClient</a></p>
 
 <h1 id="test">Test</h1>
 
@@ -119,8 +119,8 @@ environment variable:</p>
 
 <h2 id="integration-tests">Integration tests</h2>
 
-<p>The integration tests are grouped by API in <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/test/scala/github4s/integration/">github4s.integration package</a>. As a result,
-we’ll be writing our tests in <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/test/scala/github4s/integration/GHReposSpec.scala">GHReposSpec</a>:</p>
+<p>The integration tests are grouped by API in <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/test/scala/github4s/integration/">github4s.integration package</a>. As a result,
+we’ll be writing our tests in <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/test/scala/github4s/integration/GHReposSpec.scala">GHReposSpec</a>:</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">"Repos &gt;&gt; ListStatus"</span> <span class="n">should</span> <span class="s">"return a non empty list when a valid ref is provided"</span> <span class="n">taggedAs</span> <span class="nc">Integration</span> <span class="n">in</span> <span class="o">{</span>
     <span class="k">val</span> <span class="nv">response</span> <span class="k">=</span> <span class="nv">client</span><span class="o">.</span><span class="py">use</span> <span class="o">{</span> <span class="n">client</span> <span class="k">=&gt;</span>
@@ -149,9 +149,9 @@ we’ll be writing our tests in <a href="https://github.com/47degrees/github4s/b
 
 <h2 id="unit-tests">Unit tests</h2>
 
-<p>We can now move on to the unit tests which reside in the <a href="https://github.com/47degrees/github4s/tree/master/github4s/src/test/scala/github4s/unit">github4s.unit package</a>. We’re
-going to test our <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/main/scala/github4s/interpreters/RepositoriesInterpreter.scala">Intepreter</a>. Here too, the unit tests are
-grouped by API which means we’ll be working on <a href="https://github.com/47degrees/github4s/blob/master/github4s/src/test/scala/github4s/unit/ReposSpec.scala">ReposSpec</a>.</p>
+<p>We can now move on to the unit tests which reside in the <a href="https://github.com/47degrees/github4s/tree/main/github4s/src/test/scala/github4s/unit">github4s.unit package</a>. We’re
+going to test our <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/interpreters/RepositoriesInterpreter.scala">Intepreter</a>. Here too, the unit tests are
+grouped by API which means we’ll be working on <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/test/scala/github4s/unit/ReposSpec.scala">ReposSpec</a>.</p>
 
 <h3 id="interpreter-spec">Interpreter spec</h3>
 
@@ -180,7 +180,7 @@ grouped by API which means we’ll be working on <a href="https://github.com/47d
 to generate and publish its documentation.</p>
 
 <p>It shouldn’t come as a surprise at this point, but the documentation is grouped by API. As a result,
-we’ll add documentation to <a href="https://github.com/47degrees/github4s/blob/master/docs/docs/repository.md">repository.md</a>:</p>
+we’ll add documentation to <a href="https://github.com/47degrees/github4s/blob/main/docs/docs/repository.md">repository.md</a>:</p>
 
 <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>### List statuses for a specific ref
 
@@ -192,7 +192,7 @@ You can also list statuses through `listStatuses`; it take as arguments:
 To list the statuses for a specific ref:
 
 {triple backtick}scala mdoc:silent
-val listStatuses = gh.repos.listStatuses("47degrees", "github4s", "heads/master")
+val listStatuses = gh.repos.listStatuses("47degrees", "github4s", "heads/main")
 listStatuses.flatMap(_.result match {
   case Left(e)  =&gt; IO.println(s"Something went wrong: ${e.getMessage}")
   case Right(r) =&gt; IO.println(r)
@@ -211,7 +211,7 @@ for full reference.
 <span class="nb">cd </span>docs/target/site/ <span class="o">&amp;&amp;</span> jekyll serve
 </code></pre></div></div>
 
-</div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><p>Github4s is designed and developed by <a href="https://github.com/47degrees/github4s/blob/master/AUTHORS.md" target="_blank" rel="noopener noreferrer">Github4s contributors</a></p></div><div class="row"><div><p>Website built with <a href="https://47degrees.github.io/sbt-microsites/" target="_blank" rel="noopener noreferrer">sbt-microsites</a> - © 2019 <a href="https://www.47deg.com/" target="_blank" rel="noopener noreferrer">47 Degrees</a></p></div></div></div></footer><script src="/github4s/highlight/highlight.pack.js"></script><script src="/github4s/lunr/lunr.js"></script><script>
+</div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><p>Github4s is designed and developed by <a href="https://github.com/47degrees/github4s/blob/main/AUTHORS.md" target="_blank" rel="noopener noreferrer">Github4s contributors</a></p></div><div class="row"><div><p>Website built with <a href="https://47degrees.github.io/sbt-microsites/" target="_blank" rel="noopener noreferrer">sbt-microsites</a> - © 2019 <a href="https://www.47deg.com/" target="_blank" rel="noopener noreferrer">47 Degrees</a></p></div></div></div></footer><script src="/github4s/highlight/highlight.pack.js"></script><script src="/github4s/lunr/lunr.js"></script><script>
 // For all code blocks, copy the language from the containing div
 // to the inner code tag (where hljs expects it to be)
 const langPrefix = 'language-';
