@@ -145,7 +145,9 @@ object Decoders {
         clone_url         <- c.downField("clone_url").as[String]
         svn_url           <- c.downField("svn_url").as[String]
         permissions       <- c.downField("permissions").as[Option[RepoPermissions]]
-        repoUrls          <- readRepoUrls(c)
+        default_branch    <- c.downField("default_branch").as[String]
+        topics            <- c.downField("topics").as[Option[List[String]]].map(_.getOrElse(List.empty))
+        repoUrls <- readRepoUrls(c)
       } yield RepositoryBase(
         id = id,
         name = name,
@@ -185,7 +187,9 @@ object Decoders {
           clone_url = clone_url,
           svn_url = svn_url,
           otherUrls = repoUrls
-        )
+        ),
+        default_branch = default_branch,
+        topics = topics
       )
     }
   }

@@ -155,7 +155,9 @@ object Encoders {
         "ssh_url"           -> rb.urls.ssh_url.asJson,
         "clone_url"         -> rb.urls.clone_url.asJson,
         "svn_url"           -> rb.urls.svn_url.asJson,
-        "permissions"       -> rb.permissions.asJson
+        "permissions"       -> rb.permissions.asJson,
+        "default_branch"    -> rb.default_branch.asJson,
+        "topics"            -> rb.topics.asJson
       )
   }
   implicit val encoderPullRequest: Encoder[PullRequest] = deriveEncoder[PullRequest]
@@ -216,11 +218,13 @@ object Encoders {
       updated_at = r.updated_at,
       pushed_at = r.pushed_at,
       status = r.status,
+      default_branch = r.default_branch,
       description = r.description,
       homepage = r.homepage,
       language = r.language,
       organization = r.organization,
-      permissions = r.permissions
+      permissions = r.permissions,
+      topics = r.topics
     )
     base.asJson deepMerge
       Json.obj("parent" -> r.parent.asJson, "source" -> r.source.asJson)

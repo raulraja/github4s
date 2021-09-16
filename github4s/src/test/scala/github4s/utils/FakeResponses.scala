@@ -143,7 +143,7 @@ trait FakeResponses {
       |  "forks": 1,
       |  "open_issues": 5,
       |  "watchers": 0,
-      |  "default_branch": "master",
+      |  "default_branch": "main",
       |  "organization": {
       |    "login": "47deg",
       |    "id": 479857,

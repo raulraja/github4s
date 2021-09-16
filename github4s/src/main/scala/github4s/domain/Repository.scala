@@ -30,11 +30,13 @@ final case class RepositoryBase(
     updated_at: String,
     pushed_at: String,
     status: RepoStatus,
+    default_branch: String,
     description: Option[String] = None,
     homepage: Option[String] = None,
     language: Option[String] = None,
     organization: Option[User] = None,
-    permissions: Option[RepoPermissions] = None
+    permissions: Option[RepoPermissions] = None,
+    topics: List[String] = Nil
 )
 
 final case class Repository(
@@ -50,13 +52,15 @@ final case class Repository(
     updated_at: String,
     pushed_at: String,
     status: RepoStatus,
+    default_branch: String,
     description: Option[String] = None,
     homepage: Option[String] = None,
     language: Option[String] = None,
     organization: Option[User] = None,
     parent: Option[RepositoryBase] = None,
     permissions: Option[RepoPermissions] = None,
-    source: Option[RepositoryBase] = None
+    source: Option[RepositoryBase] = None,
+    topics: List[String] = Nil
 )
 
 object Repository {
@@ -78,13 +82,15 @@ object Repository {
       b.updated_at,
       b.pushed_at,
       b.status,
+      b.default_branch,
       b.description,
       b.homepage,
       b.language,
       b.organization,
       parent,
       b.permissions,
-      source
+      source,
+      b.topics
     )
 }
 
