@@ -355,4 +355,33 @@ object RepoUrlKeys {
     deployments_url
   )
 
+  final case class CommitComparisonResponse(
+      status: String,
+      ahead_by: Int,
+      behind_by: Int,
+      total_commits: Int,
+      url: Option[String] = None,
+      html_url: Option[String] = None,
+      permalink_url: Option[String] = None,
+      diff_url: Option[String] = None,
+      patch_url: Option[String] = None,
+      base_commit: Option[Commit] = None,
+      merge_base_commit: Option[Commit] = None,
+      commits: Seq[Commit] = Seq.empty,
+      files: Seq[FileComparison] = Seq.empty
+  )
+
+  final case class FileComparison(
+      sha: String,
+      filename: String,
+      status: String,
+      additions: Int,
+      deletions: Int,
+      changes: Int,
+      blob_url: String,
+      raw_url: String,
+      contents_url: String,
+      patch: String
+  )
+
 }

@@ -179,4 +179,15 @@ trait PullRequests[F[_]] {
       reviewers: ReviewersRequest,
       headers: Map[String, String] = Map()
   ): F[GHResponse[PullRequest]]
+
+  /**
+   * This is an experimental API and could be changed or removed
+   */
+  def updateBranch(
+      owner: String,
+      repo: String,
+      pullRequest: Int,
+      expectedHeadSha: Option[String] = None,
+      headers: Map[String, String] = Map()
+  ): F[GHResponse[BranchUpdateResponse]]
 }

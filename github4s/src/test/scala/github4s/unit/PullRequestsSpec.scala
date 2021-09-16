@@ -261,4 +261,25 @@ class PullRequestsSpec extends BaseSpec {
       .shouldNotFail
   }
 
+  "PullRequests.updateBranch" should "call to httpClient.put with the right parameters" in {
+
+    implicit val httpClientMock: HttpClient[IO] =
+      httpClientMockPut[BranchUpdateRequest, BranchUpdateResponse](
+        url = s"repos/$validRepoOwner/$validRepoName/pulls/$validPullRequestNumber/update-branch",
+        req = BranchUpdateRequest(None),
+        response = IO.pure(validBranchUpdateResponse)
+      )
+
+    val pullRequests = new PullRequestsInterpreter[IO]
+
+    pullRequests
+      .updateBranch(
+        validRepoOwner,
+        validRepoName,
+        validPullRequestNumber,
+        None,
+        headerUserAgent
+      )
+      .shouldNotFail
+  }
 }
