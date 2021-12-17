@@ -247,13 +247,21 @@ object Encoders {
   implicit val encoderMilestone: Encoder[Milestone]               = deriveEncoder[Milestone]
   implicit val encodeBranchUpdateResponse: Encoder[BranchUpdateResponse] =
     deriveEncoder[BranchUpdateResponse]
-  implicit val encodeFileComparisonModified: Encoder[FileComparison.FileComparisonModified] =
-    deriveEncoder[FileComparison.FileComparisonModified]
+  implicit val encodeFileComparisonNotRenamed: Encoder[FileComparison.FileComparisonNotRenamed] =
+    deriveEncoder[FileComparison.FileComparisonNotRenamed]
+
+  // Ensures that the `status` field is populated when encoded as it is not part of the model.
   implicit val encodeFileComparisonRenamed: Encoder[FileComparison.FileComparisonRenamed] =
-    deriveEncoder[FileComparison.FileComparisonRenamed]
+    deriveEncoder[FileComparison.FileComparisonRenamed].mapJson { json =>
+      json.deepMerge(
+        Json.obj(
+          "status" -> Json.fromString("renamed")
+        )
+      )
+    }
   implicit val encodeFileComparison: Encoder[FileComparison] = Encoder.instance {
-    case a: FileComparison.FileComparisonModified => encodeFileComparisonModified(a)
-    case b: FileComparison.FileComparisonRenamed  => encodeFileComparisonRenamed(b)
+    case a: FileComparison.FileComparisonNotRenamed => encodeFileComparisonNotRenamed(a)
+    case b: FileComparison.FileComparisonRenamed    => encodeFileComparisonRenamed(b)
   }
   implicit val encodeCommitComparisonResponse: Encoder[CommitComparisonResponse] =
     deriveEncoder[CommitComparisonResponse]

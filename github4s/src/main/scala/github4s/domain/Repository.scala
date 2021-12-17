@@ -373,9 +373,9 @@ object RepoUrlKeys {
 
   /**
    * A file comparison that contains information on the changes to a file.
-   * There are two subtypes: `FileComparisonModified` and `FileComparisonRenamed` that have different guarantees.
+   * There are two subtypes: `FileComparisonNotRenamed` and `FileComparisonRenamed` that have different guarantees.
    *
-   * * `FileComparisonModified` guarantees that the `patch` field exists, does not have a `previous_filename` field.
+   * * `FileComparisonNotRenamed` guarantees that the `patch` field exists, does not have a `previous_filename` field.
    * * `FileComparisonRenamed` guarantees that the `previous_filename` field exists and sometimes contains a `patch` field.
    *
    * To get values from these fields, there are helper methods `getPatch` and `getPreviousFilename`, though
@@ -395,7 +395,7 @@ object RepoUrlKeys {
     /**
      * Gets the contents of the `patch` field if it exists, in the case that the file was modified.
      * To guarantee that the `patch` field is available, match this `FileComparison` value as a
-     * `FileComparison.FileComparisonModified` type which always has this field.
+     * `FileComparison.FileComparisonNotRenamed` type which always has this field.
      */
     def getPatch: Option[String]
 
@@ -418,7 +418,6 @@ object RepoUrlKeys {
     final case class FileComparisonRenamed(
         sha: String,
         filename: String,
-        status: String,
         additions: Int,
         deletions: Int,
         changes: Int,
@@ -428,12 +427,13 @@ object RepoUrlKeys {
         patch: Option[String],
         previous_filename: String
     ) extends FileComparison {
+      val status: String                      = "renamed"
       def getPatch: Option[String]            = patch
       def getPreviousFilename: Option[String] = Some(previous_filename)
     }
 
-    /** Represents a file comparison where a file was modified in-place with no rename. */
-    final case class FileComparisonModified(
+    /** Represents a file comparison where a file was not renamed. */
+    final case class FileComparisonNotRenamed(
         sha: String,
         filename: String,
         status: String,
