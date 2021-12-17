@@ -246,13 +246,13 @@ object Decoders {
         )
       )
 
-  implicit val decoderFileComparisonPatch: Decoder[FileComparison.FileComparisonPatch] =
-    deriveDecoder[FileComparison.FileComparisonPatch]
-  implicit val decoderFileComparisonRename: Decoder[FileComparison.FileComparisonRename] =
-    deriveDecoder[FileComparison.FileComparisonRename]
+  implicit val decoderFileComparisonModified: Decoder[FileComparison.FileComparisonModified] =
+    deriveDecoder[FileComparison.FileComparisonModified]
+  implicit val decoderFileComparisonRenamed: Decoder[FileComparison.FileComparisonRenamed] =
+    deriveDecoder[FileComparison.FileComparisonRenamed]
 
   implicit val decoderFileComparison: Decoder[FileComparison] =
-    decoderFileComparisonPatch.widen.or(decoderFileComparisonRename.widen)
+    decoderFileComparisonModified.widen.or(decoderFileComparisonRenamed.widen)
 
   implicit val decoderCreatePullRequestData: Decoder[CreatePullRequestData] =
     deriveDecoder[CreatePullRequestData]

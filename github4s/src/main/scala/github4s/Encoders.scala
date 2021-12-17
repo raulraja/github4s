@@ -247,13 +247,13 @@ object Encoders {
   implicit val encoderMilestone: Encoder[Milestone]               = deriveEncoder[Milestone]
   implicit val encodeBranchUpdateResponse: Encoder[BranchUpdateResponse] =
     deriveEncoder[BranchUpdateResponse]
-  implicit val encodeFileComparisonPatch: Encoder[FileComparison.FileComparisonPatch] =
-    deriveEncoder[FileComparison.FileComparisonPatch]
-  implicit val encodeFileComparisonRename: Encoder[FileComparison.FileComparisonRename] =
-    deriveEncoder[FileComparison.FileComparisonRename]
+  implicit val encodeFileComparisonModified: Encoder[FileComparison.FileComparisonModified] =
+    deriveEncoder[FileComparison.FileComparisonModified]
+  implicit val encodeFileComparisonRenamed: Encoder[FileComparison.FileComparisonRenamed] =
+    deriveEncoder[FileComparison.FileComparisonRenamed]
   implicit val encodeFileComparison: Encoder[FileComparison] = Encoder.instance {
-    case a: FileComparison.FileComparisonPatch  => encodeFileComparisonPatch(a)
-    case b: FileComparison.FileComparisonRename => encodeFileComparisonRename(b)
+    case a: FileComparison.FileComparisonModified => encodeFileComparisonModified(a)
+    case b: FileComparison.FileComparisonRenamed  => encodeFileComparisonRenamed(b)
   }
   implicit val encodeCommitComparisonResponse: Encoder[CommitComparisonResponse] =
     deriveEncoder[CommitComparisonResponse]

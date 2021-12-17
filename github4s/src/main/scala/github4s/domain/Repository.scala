@@ -373,10 +373,10 @@ object RepoUrlKeys {
 
   /**
    * A file comparison that contains information on the changes to a file.
-   * There are two subtypes: `FileComparisonPatch` and `FileComparisonRename` that have different guarantees.
+   * There are two subtypes: `FileComparisonModified` and `FileComparisonRenamed` that have different guarantees.
    *
-   * * `FileComparisonPatch` guarantees that the `patch` field exists and has an optional `previous_filename` field.
-   * * `FileComparisonRename` guarantees that the `previous_filename` field exists and does not have a `patch` field.
+   * * `FileComparisonModified` guarantees that the `patch` field exists, does not have a `previous_filename` field.
+   * * `FileComparisonRenamed` guarantees that the `previous_filename` field exists and sometimes contains a `patch` field.
    *
    * To get values from these fields, there are helper methods `getPatch` and `getPreviousFilename`, though
    * it is recomended to match on your `FileComparison` value to determine which type it is, to remove ambiguity.
@@ -393,18 +393,17 @@ object RepoUrlKeys {
     def contents_url: String
 
     /**
-     * Gets the contents of the `patch` field if it exists.
+     * Gets the contents of the `patch` field if it exists, in the case that the file was modified.
      * To guarantee that the `patch` field is available, match this `FileComparison` value as a
-     * `FileComparison.FileComparisonPatch` type which always has this field.
+     * `FileComparison.FileComparisonModified` type which always has this field.
      */
     def getPatch: Option[String]
 
     /**
      * Gets the contents of the `previous_filename` field if it exists.
-     * This field can sometimes appear in the case of a small file modification,
-     * but is guaranteed to appear in the event of a rename. To guarantee that
-     * this field is available, match this `FileComparison` value as a
-     * `FileComparison.FileComparisonRename` type which always has this field.
+     * This field is guaranteed to appear in the event of any rename.
+     * To guarantee that this field is available, match this `FileComparison` value as a
+     * `FileComparison.FileComparisonRenamde` type which always has this field.
      */
     def getPreviousFilename: Option[String]
   }
@@ -412,11 +411,11 @@ object RepoUrlKeys {
   object FileComparison {
 
     /**
-     * Represents a file comparison where the only change was a rename.
-     * The `patch` field does not exist, and the `previous_filename` field is guaranteed to exist,
-     * containing the file's previous filename.
+     * Represents a file comparison where the file was renamed.
+     * The `patch` field will exist if there were also small internal file changes,
+     * and the `previous_filename` field is guaranteed to exist, containing the file's previous filename.
      */
-    final case class FileComparisonRename(
+    final case class FileComparisonRenamed(
         sha: String,
         filename: String,
         status: String,
@@ -426,18 +425,15 @@ object RepoUrlKeys {
         blob_url: String,
         raw_url: String,
         contents_url: String,
+        patch: Option[String],
         previous_filename: String
     ) extends FileComparison {
-      def getPatch: Option[String]            = None
+      def getPatch: Option[String]            = patch
       def getPreviousFilename: Option[String] = Some(previous_filename)
     }
 
-    /**
-     * Represents a file comparison where a patch was applied to a file.
-     * If the file was renamed, the `previous_filename` field will be present.
-     * Otherwise, it will be `None`.
-     */
-    final case class FileComparisonPatch(
+    /** Represents a file comparison where a file was modified in-place with no rename. */
+    final case class FileComparisonModified(
         sha: String,
         filename: String,
         status: String,
@@ -447,11 +443,10 @@ object RepoUrlKeys {
         blob_url: String,
         raw_url: String,
         contents_url: String,
-        patch: String,
-        previous_filename: Option[String]
+        patch: String
     ) extends FileComparison {
       def getPatch: Option[String]            = Some(patch)
-      def getPreviousFilename: Option[String] = previous_filename
+      def getPreviousFilename: Option[String] = None
     }
   }
 
