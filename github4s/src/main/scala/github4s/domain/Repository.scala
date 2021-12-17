@@ -371,17 +371,34 @@ object RepoUrlKeys {
       files: Seq[FileComparison] = Seq.empty
   )
 
-  final case class FileComparison(
-      sha: String,
-      filename: String,
-      status: String,
-      additions: Int,
-      deletions: Int,
-      changes: Int,
-      blob_url: String,
-      raw_url: String,
-      contents_url: String,
-      patch: String
-  )
+  sealed trait FileComparison
+
+  object FileComparison {
+    final case class FileComparisonRename(
+        sha: String,
+        filename: String,
+        status: String,
+        additions: Int,
+        deletions: Int,
+        changes: Int,
+        blob_url: String,
+        raw_url: String,
+        contents_url: String,
+        previous_filename: String
+    ) extends FileComparison
+
+    final case class FileComparisonPatch(
+        sha: String,
+        filename: String,
+        status: String,
+        additions: Int,
+        deletions: Int,
+        changes: Int,
+        blob_url: String,
+        raw_url: String,
+        contents_url: String,
+        patch: String
+    ) extends FileComparison
+  }
 
 }
