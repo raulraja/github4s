@@ -371,9 +371,51 @@ object RepoUrlKeys {
       files: Seq[FileComparison] = Seq.empty
   )
 
-  sealed trait FileComparison
+  /**
+   * A file comparison that contains information on the changes to a file.
+   * There are two subtypes: `FileComparisonPatch` and `FileComparisonRename` that have different guarantees.
+   *
+   * * `FileComparisonPatch` guarantees that the `patch` field exists and has an optional `previous_filename` field.
+   * * `FileComparisonRename` guarantees that the `previous_filename` field exists and does not have a `patch` field.
+   *
+   * To get values from these fields, there are helper methods `getPatch` and `getPreviousFilename`, though
+   * it is recomended to match on your `FileComparison` value to determine which type it is, to remove ambiguity.
+   */
+  sealed trait FileComparison {
+    def sha: String
+    def filename: String
+    def status: String
+    def additions: Int
+    def deletions: Int
+    def changes: Int
+    def blob_url: String
+    def raw_url: String
+    def contents_url: String
+
+    /**
+     * Gets the contents of the `patch` field if it exists.
+     * To guarantee that the `patch` field is available, match this `FileComparison` value as a
+     * `FileComparison.FileComparisonPatch` type which always has this field.
+     */
+    def getPatch: Option[String]
+
+    /**
+     * Gets the contents of the `previous_filename` field if it exists.
+     * This field can sometimes appear in the case of a small file modification,
+     * but is guaranteed to appear in the event of a rename. To guarantee that
+     * this field is available, match this `FileComparison` value as a
+     * `FileComparison.FileComparisonRename` type which always has this field.
+     */
+    def getPreviousFilename: Option[String]
+  }
 
   object FileComparison {
+
+    /**
+     * Represents a file comparison where the only change was a rename.
+     * The `patch` field does not exist, and the `previous_filename` field is guaranteed to exist,
+     * containing the file's previous filename.
+     */
     final case class FileComparisonRename(
         sha: String,
         filename: String,
@@ -385,8 +427,16 @@ object RepoUrlKeys {
         raw_url: String,
         contents_url: String,
         previous_filename: String
-    ) extends FileComparison
+    ) extends FileComparison {
+      def getPatch: Option[String]            = None
+      def getPreviousFilename: Option[String] = Some(previous_filename)
+    }
 
+    /**
+     * Represents a file comparison where a patch was applied to a file.
+     * If the file was renamed, the `previous_filename` field will be present.
+     * Otherwise, it will be `None`.
+     */
     final case class FileComparisonPatch(
         sha: String,
         filename: String,
@@ -397,8 +447,12 @@ object RepoUrlKeys {
         blob_url: String,
         raw_url: String,
         contents_url: String,
-        patch: String
-    ) extends FileComparison
+        patch: String,
+        previous_filename: Option[String]
+    ) extends FileComparison {
+      def getPatch: Option[String]            = Some(patch)
+      def getPreviousFilename: Option[String] = previous_filename
+    }
   }
 
 }
