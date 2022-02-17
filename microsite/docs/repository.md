@@ -79,7 +79,7 @@ reference.
 You can globally search repositories using `searchRepos`; it takes as arguments:
 
 - a `query` string (the URL encoding is taken care of by Github4s).
-- a list of [SearchParam](https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/free/domain/SearchParam.scala).
+- a list of [SearchParam](https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/SearchParam.scala).
 - `pagination`: Limit and Offset for pagination.
 
 To search repositories on GitHub:
@@ -597,5 +597,5 @@ As you can see, a few features of the repository endpoint are missing.
 
 As a result, if you'd like to see a feature supported, feel free to create an issue and/or a pull request!
 
-[repository-scala]: https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala
-[user-scala]: https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/User.scala
+[repository-scala]: https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala
+[user-scala]: https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/User.scala
