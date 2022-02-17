@@ -159,7 +159,7 @@ Lastly, you can also search issues all across Github thanks to `searchIssues`; i
 arguments:
 
 - a `query` string (the URL encoding is taken care of by Github4s).
-- a list of [SearchParam](https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/free/domain/SearchParam.scala).
+- a list of [SearchParam](https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/SearchParam.scala).
 
 Let's say we want to search for the Scala bugs (<https://github.com/scala/bug>) which contain
 the "existential" keyword in their title:
@@ -468,8 +468,8 @@ As you can see, a few features of the issue endpoint are missing.
 
 As a result, if you'd like to see a feature supported, feel free to create an issue and/or a pull request!
 
-[issue-scala]: https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Issue.scala
-[user-scala]: https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/User.scala
+[issue-scala]: https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Issue.scala
+[user-scala]: https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/User.scala
 
 ## Milestones
 
