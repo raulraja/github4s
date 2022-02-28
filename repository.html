@@ -80,7 +80,7 @@ with Github4s, you can interact with:</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the get <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Repository</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the get <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">Repository</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/#get">the API doc</a> for full
 reference.</p>
@@ -91,7 +91,7 @@ reference.</p>
 
 <ul>
   <li>a <code class="highlighter-rouge">query</code> string (the URL encoding is taken care of by Github4s).</li>
-  <li>a list of <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/free/domain/SearchParam.scala">SearchParam</a>.</li>
+  <li>a list of <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/SearchParam.scala">SearchParam</a>.</li>
   <li><code class="highlighter-rouge">pagination</code>: Limit and Offset for pagination.</li>
 </ul>
 
@@ -125,7 +125,7 @@ takes as arguments:</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Repository]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">List[Repository]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/#list-organization-repositories">the API doc</a> for full
 reference.</p>
@@ -150,7 +150,7 @@ takes as arguments:</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Repository]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">List[Repository]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/#list-repositories-for-a-user">the API doc</a> for full
 reference.</p>
@@ -177,7 +177,7 @@ sorted by the number of commits per contributor in descending order.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/User.scala">List[User]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/User.scala">List[User]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/#list-contributors">the API doc</a> for full
 reference.</p>
@@ -202,7 +202,7 @@ For more information take a look at <a href="https://developer.github.com/v3/rep
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/User.scala">List[User]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/User.scala">List[User]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/collaborators/#list-collaborators">the API doc</a> for full
 reference.</p>
@@ -236,7 +236,7 @@ for full reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">UserRepoPermission</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">UserRepoPermission</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/collaborators/#get-repository-permissions-for-a-user">the API doc</a> for full
 reference.</p>
@@ -274,7 +274,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Commit]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">List[Commit]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository">the API doc</a> for full
 reference.</p>
@@ -303,7 +303,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[CommitComparisonResponse]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">List[CommitComparisonResponse]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/#compare-two-commits">the API doc</a> for full
 reference.</p>
@@ -332,7 +332,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Branch]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">List[Branch]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/branches/#list-branches">the API doc</a> for full reference.</p>
 
@@ -360,7 +360,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">NonEmptyList[Content]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">NonEmptyList[Content]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/contents/#get-contents">the API doc</a> for full
 reference.</p>
@@ -472,7 +472,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Release]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">List[Release]</a>.</p>
 
 <h3 id="get-a-single-release">Get a single release</h3>
 
@@ -496,7 +496,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Option[Release]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">Option[Release]</a>.</p>
 
 <h3 id="the-latest-release">The latest release</h3>
 
@@ -518,7 +518,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Option[Release]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">Option[Release]</a>.</p>
 
 <h3 id="create-a-release">Create a release</h3>
 
@@ -545,7 +545,7 @@ Can be any branch or commit <code class="highlighter-rouge">SHA</code>. Unused i
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Release</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">Release</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/releases/#create-a-release">the API doc</a> for full
 reference.</p>
@@ -572,7 +572,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">Status</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">Status</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/statuses/#create-a-status">the API doc</a> for full
 reference.</p>
@@ -596,7 +596,7 @@ reference.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">List[Status]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">List[Status]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/repos/statuses/#list-statuses-for-a-specific-ref">the API doc</a>
 for full reference.</p>
@@ -613,7 +613,7 @@ arguments as the operation listing statuses:</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/Repository.scala">CombinedStatus</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/Repository.scala">CombinedStatus</a>.</p>
 
 <p>Note that the state of the combined status is the product of a heuristic detailed in
 <a href="https://developer.github.com/v3/repos/statuses/#get-the-combined-status-for-a-specific-ref">the API documentation</a>.</p>

@@ -59,7 +59,7 @@ which doesn’t exist, would return head refs including <code class="highlighter
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/GitData.scala">List[Ref]</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/GitData.scala">List[Ref]</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/git/refs/#get-a-reference">the API doc</a> for full reference.</p>
 
@@ -88,7 +88,7 @@ If it doesn’t start with ‘refs’ and has at least two slashes, it will be r
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/GitData.scala">Ref</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/GitData.scala">Ref</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/git/refs/#create-a-reference">the API doc</a> for full reference.</p>
 
@@ -116,7 +116,7 @@ Setting it to <code class="highlighter-rouge">false</code> will make sure you’
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the updated <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/GitData.scala">Ref</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the updated <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/GitData.scala">Ref</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/git/refs/#update-a-reference">the API doc</a> for full reference.</p>
 
@@ -138,7 +138,7 @@ Setting it to <code class="highlighter-rouge">false</code> will make sure you’
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/GitData.scala">RefCommit</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/GitData.scala">RefCommit</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/git/commits/#get-a-commit">the API doc</a> for full reference.</p>
 
@@ -169,7 +169,7 @@ for a merge commit, an array of more than one should be provided.</li>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/GitData.scala">RefCommit</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/GitData.scala">RefCommit</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/git/commits/#create-a-commit">the API doc</a> for full reference.</p>
 
@@ -191,7 +191,7 @@ for a merge commit, an array of more than one should be provided.</li>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/GitData.scala">BlobContent</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/GitData.scala">BlobContent</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/git/blobs/#get-a-blob">the API doc</a> for full reference.</p>
 
@@ -212,7 +212,7 @@ for a merge commit, an array of more than one should be provided.</li>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/GitData.scala">RefObject</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/GitData.scala">RefObject</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/git/blobs/#create-a-blob">the API doc</a> for full reference.</p>
 
@@ -242,7 +242,7 @@ are just tools to navigate this tree and to manipulate it.</p>
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/GitData.scala">TreeResult</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the corresponding <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/GitData.scala">TreeResult</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/git/trees/#get-a-tree">the API doc</a> for full reference.</p>
 
@@ -287,7 +287,7 @@ however, it will only contain your changes, the rest of your files will show up 
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/GitData.scala">TreeResult</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/GitData.scala">TreeResult</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/git/trees/#create-a-tree">the API doc</a> for full reference.</p>
 
@@ -322,7 +322,7 @@ Normally this is a <code class="highlighter-rouge">commit</code>, but it can als
 <span class="o">})</span>
 </code></pre></div></div>
 
-<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/src/main/scala/github4s/domain/GitData.scala">Tag</a>.</p>
+<p>The <code class="highlighter-rouge">result</code> on the right is the created <a href="https://github.com/47degrees/github4s/blob/main/github4s/shared/src/main/scala/github4s/domain/GitData.scala">Tag</a>.</p>
 
 <p>See <a href="https://developer.github.com/v3/git/tags/#create-a-tag-object">the API doc</a> for full reference.</p>
 
