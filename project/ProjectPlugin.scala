@@ -72,7 +72,7 @@ object ProjectPlugin extends AutoPlugin {
 
     lazy val coreDeps = Seq(
       libraryDependencies ++= Seq(
-    //    "org.typelevel"        %% "cats-core"           % V.cats,
+        "org.typelevel"        %% "cats-core"           % V.cats,
         "io.circe"             %% "circe-core"          % V.circe,
         "io.circe"             %% "circe-generic"       % V.circe,
         "org.http4s"           %% "http4s-client"       % V.http4s,
